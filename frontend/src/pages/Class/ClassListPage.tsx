@@ -11,9 +11,10 @@ interface ClassData {
 
 interface ClassListPageProps {
   onNavigateToClass?: (classId: string, className: string) => void;
+  onNavigateToStudentList?: (classId: string, className: string) => void;
 }
 
-function ClassListPage({ onNavigateToClass }: ClassListPageProps) {
+function ClassListPage({ onNavigateToClass, onNavigateToStudentList }: ClassListPageProps) {
   const [classes] = useState<ClassData[]>([
     { id: '1-1', className: '1학년 1반', totalStudents: 26, atRiskStudents: 1, achievementRate: 76 },
     { id: '1-2', className: '1학년 2반', totalStudents: 25, atRiskStudents: 2, achievementRate: 80 },
@@ -75,6 +76,7 @@ function ClassListPage({ onNavigateToClass }: ClassListPageProps) {
             atRiskStudents={classData.atRiskStudents}
             achievementRate={classData.achievementRate}
             onClassClick={onNavigateToClass}
+            onStudentClick={onNavigateToStudentList}
           />
         ))}
         

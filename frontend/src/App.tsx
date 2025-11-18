@@ -37,7 +37,11 @@ function App() {
     setCurrentPage('studentDetail');
   };
 
-  const handleNavigateToStudentList = () => {
+  const handleNavigateToStudentList = (classId?: string, className?: string) => {
+    if (classId && className) {
+      setSelectedClassId(classId);
+      setSelectedClassName(className);
+    }
     setCurrentPage('studentList');
   };
 
@@ -68,7 +72,10 @@ function App() {
       case 'dashboard':
         return <DashboardPage />;
       case 'class':
-        return <ClassListPage onNavigateToClass={handleNavigateToClass} />;
+        return <ClassListPage 
+          onNavigateToClass={handleNavigateToClass}
+          onNavigateToStudentList={handleNavigateToStudentList}
+        />;
       case 'classDetail':
         return selectedClassId && selectedClassName ? (
           <ClassDetailPage 

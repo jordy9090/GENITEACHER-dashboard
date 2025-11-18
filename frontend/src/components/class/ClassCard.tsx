@@ -5,9 +5,10 @@ interface ClassCardProps {
   atRiskStudents: number;
   achievementRate: number;
   onClassClick?: (classId: string, className: string) => void;
+  onStudentClick?: (classId: string, className: string) => void;
 }
 
-function ClassCard({ classId, className, totalStudents, atRiskStudents, achievementRate, onClassClick }: ClassCardProps) {
+function ClassCard({ classId, className, totalStudents, atRiskStudents, achievementRate, onClassClick, onStudentClick }: ClassCardProps) {
   return (
     <div style={{
       backgroundColor: 'white',
@@ -83,17 +84,19 @@ function ClassCard({ classId, className, totalStudents, atRiskStudents, achievem
           }}>
           클래스
         </button>
-        <button style={{
-          flex: 1,
-          padding: '8px 12px',
-          backgroundColor: '#2ecc71',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '13px',
-          cursor: 'pointer',
-          fontWeight: '500'
-        }}>
+        <button 
+          onClick={() => onStudentClick?.(classId, className)}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            backgroundColor: '#2ecc71',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '13px',
+            cursor: 'pointer',
+            fontWeight: '500'
+          }}>
           학생
         </button>
         <button style={{
