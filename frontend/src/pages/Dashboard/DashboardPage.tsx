@@ -3,9 +3,17 @@ import ChartCard from '../../components/common/ChartCard';
 
 function DashboardPage() {
   return (
-    <div>
-      <h1>대시보드</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '20px' }}>
+    <div style={{ 
+      padding: '20px',
+      backgroundColor: '#f8f9fa',
+      minHeight: '100%'
+    }}>
+      <h1 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: '600' }}>대시보드</h1>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '20px'
+      }}>
         <Card title="오늘의 일정">
           <p>등록된 일정이 없습니다.</p>
         </Card>
