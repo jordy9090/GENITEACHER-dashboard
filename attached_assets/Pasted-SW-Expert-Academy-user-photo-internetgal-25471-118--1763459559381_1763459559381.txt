@@ -1,0 +1,172 @@
+SW Expert Academy모의 테스트
+user photo internetgal
+제출결과 정보
+25471. 약수 게임
+문제 내용
+시간 : 118개 테스트케이스를 합쳐서 C의 경우 1초 / C++의 경우 1초 / Java의 경우 2초 / Python의 경우 3초
+메모리 : 힙, 정적 메모리 합쳐서 256MB 이내, 스택 메모리 1MB 이내
+※ SW Expert 아카데미의 문제를 무단 복제하는 것을 금지합니다.
+ 
+
+Alice와 Bob이 자연수 변수 N을 갖고 간단한 게임을 할 것이다. 두 사람은 Alice부터 시작해서 번갈아 가면서, 2 이상 N-1 이하인 N의 약수 C를 고른 뒤, N에서 C를 뺀다.
+한 턴이 끝날 때마다 N은 적어도 2씩 감소할 것이다. 2 이상 N-1 이하인 N의 약수가 존재하지 않아서 아무것도 할 수 없는 사람이 패배한다.
+
+자연수 변수 N의 초깃값이 주어질 때, 두 사람이 최선을 다해서 게임을 한다면 누가 이기는지를 구하는 프로그램을 작성하라.
+
+ 
+
+ 
+
+[입력]
+
+첫 번째 줄에 테스트 케이스의 수 T가 주어진다.
+각 테스트 케이스는 한 개의 줄로 구성되며, 각 줄에는 변수 N의 초깃값이 주어진다.
+변수 N의 초깃값은 1 이상 1018 이하의 자연수이다.
+
+ 
+
+ 
+
+[출력]
+
+
+각 테스트 케이스마다, 두 사람이 최선을 다해서 게임을 했을 때 Alice가 이긴다면 “A”를, Bob이 이긴다면 “B”를 출력한다.
+
+
+
+1번 예제: 처음부터 약수 C가 존재하지 않으므로 Alice가 패배한다.
+3번 예제: Alice가 처음에 C = 3을 고르면, Bob 차례에 N은 6 – 3 = 3로 바뀐다. Bob은 이제 아무것도 할 수 없으므로 패배한다.
+
+
+ 
+입력
+4
+2
+4
+6
+135	 
+2_sample_input.txt
+출력
+B
+A
+A
+B	 
+2_sample_output.txt
+문제 풀이
+Language 
+JAVA (OpenJDK 8)
+}
+16
+// 표준 출력 예제
+17
+// int a = 0;                            
+18
+// double b = 1.0;               
+19
+// char g = 'b';
+20
+// String var = "ABCDEFG";
+21
+// long AB = 12345678901234567L;
+22
+//System.out.println(a);                       // int 변수 1개 출력하는 예제
+23
+//System.out.println(b);                                     // double 변수 1개 출력하는 예제
+24
+//System.out.println(g);                                     // char 변수 1개 출력하는 예제
+25
+//System.out.println(var);                             // 문자열 1개 출력하는 예제
+26
+//System.out.println(AB);                                // long 변수 1개 출력하는 예제
+27
+/////////////////////////////////////////////////////////////////////////////////////////////
+28
+import java.util.Scanner;
+29
+import java.io.FileInputStream;
+30
+​
+31
+/*
+32
+   사용하는 클래스명이 Solution 이어야 하므로, 가급적 Solution.java 를 사용할 것을 권장합니다.
+33
+   이러한 상황에서도 동일하게 java Solution 명령으로 프로그램을 수행해볼 수 있습니다.
+34
+ */
+35
+class Solution
+36
+{
+37
+    public static void main(String args[]) throws Exception
+38
+    {
+39
+        /*
+40
+           아래의 메소드 호출은 앞으로 표준 입력(키보드) 대신 input.txt 파일로부터 읽어오겠다는 의미의 코드입니다.
+41
+           여러분이 작성한 코드를 테스트 할 때, 편의를 위해서 input.txt에 입력을 저장한 후,
+42
+           이 코드를 프로그램의 처음 부분에 추가하면 이후 입력을 수행할 때 표준 입력 대신 파일로부터 입력을 받아올 수 있습니다.
+43
+           따라서 테스트를 수행할 때에는 아래 주석을 지우고 이 메소드를 사용하셔도 좋습니다.
+44
+           단, 채점을 위해 코드를 제출하실 때에는 반드시 이 메소드를 지우거나 주석 처리 하셔야 합니다.
+45
+         */
+46
+        //System.setIn(new FileInputStream("res/input.txt"));
+47
+​
+48
+        /*
+49
+           표준입력 System.in 으로부터 스캐너를 만들어 데이터를 읽어옵니다.
+50
+         */
+51
+        Scanner sc = new Scanner(System.in);
+52
+        int T;
+53
+        T=sc.nextInt();
+54
+        /*
+55
+           여러 개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
+56
+        */
+57
+​
+58
+        for(int test_case = 1; test_case <= T; test_case++)
+59
+        {
+60
+        
+61
+            long num = sc.nextLong();
+62
+            long count = 0;
+63
+            long answer = processNum(num, count);
+64
+            if(answer%2==0) System.out.println("B");
+65
+            else System.out.println("A");
+66
+            
+67
+            
+TEST
+Input 을 입력하고 Run을 선택하면 Output 결과를 확인할 수 있습니다. Input 값을 넣지 않으면 기본 Input값이 적용되어 실행됩니다. Test는 채점을 하는 것이 아니며 정답 여부를 알려주지 않습니다.
+
+Input
+Input값을 입력해 주세요.
+Output
+18:43:24 서버 에러가 발생하였습니다. 잠시 후 다시 시도해 주십시오.
+18:43:24 Input data가 없으므로 Sample input으로 테스트됩니다.
+ 
+  
