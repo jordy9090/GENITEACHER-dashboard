@@ -9,7 +9,11 @@ interface ClassData {
   achievementRate: number;
 }
 
-function ClassListPage() {
+interface ClassListPageProps {
+  onNavigateToClass?: (classId: string, className: string) => void;
+}
+
+function ClassListPage({ onNavigateToClass }: ClassListPageProps) {
   const [classes] = useState<ClassData[]>([
     { id: '1-1', className: '1학년 1반', totalStudents: 26, atRiskStudents: 1, achievementRate: 76 },
     { id: '1-2', className: '1학년 2반', totalStudents: 25, atRiskStudents: 2, achievementRate: 80 },
@@ -65,10 +69,12 @@ function ClassListPage() {
         {classes.map((classData) => (
           <ClassCard
             key={classData.id}
+            classId={classData.id}
             className={classData.className}
             totalStudents={classData.totalStudents}
             atRiskStudents={classData.atRiskStudents}
             achievementRate={classData.achievementRate}
+            onClassClick={onNavigateToClass}
           />
         ))}
         
