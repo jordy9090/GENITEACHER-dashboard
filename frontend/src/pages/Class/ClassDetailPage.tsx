@@ -2,7 +2,7 @@ interface ClassDetailPageProps {
   classId: string;
   className: string;
   onBack: () => void;
-  onNavigateToStudent: (studentId: string, studentName: string) => void;
+  onNavigateToStudentList: () => void;
 }
 
 interface StudentPerformance {
@@ -31,7 +31,7 @@ interface WeeklyObservation {
   maxScore: number;
 }
 
-function ClassDetailPage({ classId, className, onBack, onNavigateToStudent }: ClassDetailPageProps) {
+function ClassDetailPage({ classId, className, onBack, onNavigateToStudentList }: ClassDetailPageProps) {
 
   const studentData: StudentPerformance[] = [
     { id: '1', name: '김현성', email: 'jane.cooper@example.com', progress: 70, completion: '1/3', time: '00:03:20', achievement: 80 },
@@ -150,7 +150,24 @@ function ClassDetailPage({ classId, className, onBack, onNavigateToStudent }: Cl
 
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '20px' }}>
         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
-          <h3 style={{ fontSize: '16px', color: '#3498db', marginTop: 0 }}>학생별 성과 현황</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <h3 style={{ fontSize: '16px', color: '#3498db', margin: 0 }}>학생별 성과 현황</h3>
+            <button 
+              onClick={onNavigateToStudentList}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#1abc9c',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              전체 학생 보기 →
+            </button>
+          </div>
           
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -162,7 +179,6 @@ function ClassDetailPage({ classId, className, onBack, onNavigateToStudent }: Cl
                   <th style={{ padding: '10px', textAlign: 'center', color: '#666' }}>완료 사항 ▼</th>
                   <th style={{ padding: '10px', textAlign: 'center', color: '#666' }}>시간 ▼</th>
                   <th style={{ padding: '10px', textAlign: 'center', color: '#666' }}>성취도 ▼</th>
-                  <th style={{ padding: '10px', textAlign: 'center', color: '#666' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -208,22 +224,6 @@ function ClassDetailPage({ classId, className, onBack, onNavigateToStudent }: Cl
                     <td style={{ padding: '12px', textAlign: 'center', color: '#e74c3c', fontWeight: '500' }}>{student.completion}</td>
                     <td style={{ padding: '12px', textAlign: 'center', color: '#666' }}>{student.time}</td>
                     <td style={{ padding: '12px', textAlign: 'center', color: '#9b59b6', fontWeight: '500' }}>{student.achievement}%</td>
-                    <td style={{ padding: '12px', textAlign: 'center' }}>
-                      <button 
-                        onClick={() => onNavigateToStudent(student.id, student.name)}
-                        style={{
-                          padding: '6px 12px',
-                          backgroundColor: '#1abc9c',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        상세보기 →
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

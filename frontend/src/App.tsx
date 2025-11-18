@@ -3,12 +3,13 @@ import DashboardLayout from './layouts/DashboardLayout';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import ClassListPage from './pages/Class/ClassListPage';
 import ClassDetailPage from './pages/Class/ClassDetailPage';
+import StudentListPage from './pages/Class/StudentListPage';
 import StudentDetailPage from './pages/Class/StudentDetailPage';
 import SchedulePage from './pages/Schedule/SchedulePage';
 import LibraryListPage from './pages/Library/LibraryListPage';
 import PaperDetailPage from './pages/Library/PaperDetailPage';
 
-type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentDetail' | 'schedule' | 'library' | 'paperDetail';
+type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'schedule' | 'library' | 'paperDetail';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('dashboard');
@@ -36,8 +37,18 @@ function App() {
     setCurrentPage('studentDetail');
   };
 
+  const handleNavigateToStudentList = () => {
+    setCurrentPage('studentList');
+  };
+
   const handleBackToClassDetail = () => {
     setCurrentPage('classDetail');
+    setSelectedStudentId(null);
+    setSelectedStudentName(null);
+  };
+
+  const handleBackToStudentList = () => {
+    setCurrentPage('studentList');
     setSelectedStudentId(null);
     setSelectedStudentName(null);
   };
@@ -64,6 +75,17 @@ function App() {
             classId={selectedClassId} 
             className={selectedClassName}
             onBack={handleBackToClassList}
+            onNavigateToStudentList={handleNavigateToStudentList}
+          />
+        ) : (
+          <ClassListPage onNavigateToClass={handleNavigateToClass} />
+        );
+      case 'studentList':
+        return selectedClassId && selectedClassName ? (
+          <StudentListPage
+            classId={selectedClassId}
+            className={selectedClassName}
+            onBack={handleBackToClassDetail}
             onNavigateToStudent={handleNavigateToStudent}
           />
         ) : (
@@ -74,14 +96,14 @@ function App() {
           <StudentDetailPage
             studentId={selectedStudentId}
             studentName={selectedStudentName}
-            onBack={handleBackToClassDetail}
+            onBack={handleBackToStudentList}
           />
         ) : (
           selectedClassId && selectedClassName ? (
-            <ClassDetailPage 
-              classId={selectedClassId} 
+            <StudentListPage
+              classId={selectedClassId}
               className={selectedClassName}
-              onBack={handleBackToClassList}
+              onBack={handleBackToClassDetail}
               onNavigateToStudent={handleNavigateToStudent}
             />
           ) : (
@@ -110,6 +132,7 @@ function App() {
     <DashboardLayout 
       currentPage={
         currentPage === 'classDetail' ? 'class' :
+        currentPage === 'studentList' ? 'class' :
         currentPage === 'studentDetail' ? 'class' :
         currentPage === 'paperDetail' ? 'library' : 
         currentPage
