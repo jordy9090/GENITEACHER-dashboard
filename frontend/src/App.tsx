@@ -5,13 +5,15 @@ import ClassListPage from './pages/Class/ClassListPage';
 import ClassDetailPage from './pages/Class/ClassDetailPage';
 import SchedulePage from './pages/Schedule/SchedulePage';
 import LibraryListPage from './pages/Library/LibraryListPage';
+import PaperDetailPage from './pages/Library/PaperDetailPage';
 
-type PageType = 'dashboard' | 'class' | 'classDetail' | 'schedule' | 'library';
+type PageType = 'dashboard' | 'class' | 'classDetail' | 'schedule' | 'library' | 'paperDetail';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('dashboard');
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [selectedClassName, setSelectedClassName] = useState<string | null>(null);
+  const [selectedPaperId, setSelectedPaperId] = useState<string | null>(null);
 
   const handleNavigateToClass = (classId: string, className: string) => {
     setSelectedClassId(classId);
@@ -23,6 +25,16 @@ function App() {
     setCurrentPage('class');
     setSelectedClassId(null);
     setSelectedClassName(null);
+  };
+
+  const handleNavigateToPaper = (paperId: string) => {
+    setSelectedPaperId(paperId);
+    setCurrentPage('paperDetail');
+  };
+
+  const handleBackToLibrary = () => {
+    setCurrentPage('library');
+    setSelectedPaperId(null);
   };
 
   const renderPage = () => {
@@ -44,14 +56,30 @@ function App() {
       case 'schedule':
         return <SchedulePage />;
       case 'library':
-        return <LibraryListPage />;
+        return <LibraryListPage onNavigateToPaper={handleNavigateToPaper} />;
+      case 'paperDetail':
+        return selectedPaperId ? (
+          <PaperDetailPage 
+            paperId={selectedPaperId}
+            onBack={handleBackToLibrary} 
+          />
+        ) : (
+          <LibraryListPage onNavigateToPaper={handleNavigateToPaper} />
+        );
       default:
         return <DashboardPage />;
     }
   };
 
   return (
-    <DashboardLayout currentPage={currentPage === 'classDetail' ? 'class' : currentPage} onNavigate={setCurrentPage}>
+    <DashboardLayout 
+      currentPage={
+        currentPage === 'classDetail' ? 'class' : 
+        currentPage === 'paperDetail' ? 'library' : 
+        currentPage
+      } 
+      onNavigate={setCurrentPage}
+    >
       {renderPage()}
     </DashboardLayout>
   );

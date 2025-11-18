@@ -20,7 +20,11 @@ interface TeacherProfile {
   avatarColor: string;
 }
 
-function LibraryListPage() {
+interface LibraryListPageProps {
+  onNavigateToPaper: (paperId: string) => void;
+}
+
+function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   
   const teacher: TeacherProfile = {
@@ -129,7 +133,7 @@ function LibraryListPage() {
   ];
 
   const handlePaperDetail = (paperId: string) => {
-    console.log('상세보기:', paperId);
+    onNavigateToPaper(paperId);
   };
 
   const handleRegisterPaper = () => {
