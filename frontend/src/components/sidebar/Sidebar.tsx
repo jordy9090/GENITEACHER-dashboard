@@ -1,4 +1,18 @@
-function Sidebar() {
+type PageType = 'dashboard' | 'class' | 'schedule' | 'library';
+
+interface SidebarProps {
+  currentPage: PageType;
+  onNavigate: (page: PageType) => void;
+}
+
+function Sidebar({ currentPage, onNavigate }: SidebarProps) {
+  const menuItems: Array<{ page: PageType; label: string; icon: string }> = [
+    { page: 'dashboard', label: '대시보드', icon: '📊' },
+    { page: 'schedule', label: '일정 관리', icon: '📅' },
+    { page: 'class', label: '학생/반', icon: '👥' },
+    { page: 'library', label: '자료실', icon: '📚' }
+  ];
+
   return (
     <aside style={{
       width: '250px',
@@ -6,21 +20,36 @@ function Sidebar() {
       color: 'white',
       padding: '20px'
     }}>
-      <h2 style={{ marginBottom: '30px' }}>GeniTeacher</h2>
+      <h2 style={{ marginBottom: '30px', fontSize: '20px' }}>GENITEACHER</h2>
       <nav>
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          <li style={{ marginBottom: '15px' }}>
-            <a href="/" style={{ color: 'white', textDecoration: 'none' }}>대시보드</a>
-          </li>
-          <li style={{ marginBottom: '15px' }}>
-            <a href="/schedule" style={{ color: 'white', textDecoration: 'none' }}>일정 관리</a>
-          </li>
-          <li style={{ marginBottom: '15px' }}>
-            <a href="/class" style={{ color: 'white', textDecoration: 'none' }}>학생/반</a>
-          </li>
-          <li style={{ marginBottom: '15px' }}>
-            <a href="/library" style={{ color: 'white', textDecoration: 'none' }}>자료실</a>
-          </li>
+          {menuItems.map((item) => {
+            const isActive = currentPage === item.page;
+            return (
+              <li key={item.page} style={{ marginBottom: '10px' }}>
+                <button
+                  onClick={() => onNavigate(item.page)}
+                  style={{ 
+                    color: 'white', 
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                    transition: 'background-color 0.2s',
+                    border: 'none',
+                    width: '100%',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  <span style={{ marginRight: '10px' }}>{item.icon}</span>
+                  {item.label}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </aside>
