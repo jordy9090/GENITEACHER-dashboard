@@ -2,6 +2,7 @@ interface ClassDetailPageProps {
   classId: string;
   className: string;
   onBack: () => void;
+  onNavigateToStudent: (studentId: string, studentName: string) => void;
 }
 
 interface StudentPerformance {
@@ -30,7 +31,7 @@ interface WeeklyObservation {
   maxScore: number;
 }
 
-function ClassDetailPage({ classId, className, onBack }: ClassDetailPageProps) {
+function ClassDetailPage({ classId, className, onBack, onNavigateToStudent }: ClassDetailPageProps) {
 
   const studentData: StudentPerformance[] = [
     { id: '1', name: '김현성', email: 'jane.cooper@example.com', progress: 70, completion: '1/3', time: '00:03:20', achievement: 80 },
@@ -208,15 +209,18 @@ function ClassDetailPage({ classId, className, onBack }: ClassDetailPageProps) {
                     <td style={{ padding: '12px', textAlign: 'center', color: '#666' }}>{student.time}</td>
                     <td style={{ padding: '12px', textAlign: 'center', color: '#9b59b6', fontWeight: '500' }}>{student.achievement}%</td>
                     <td style={{ padding: '12px', textAlign: 'center' }}>
-                      <button style={{
-                        padding: '6px 12px',
-                        backgroundColor: '#1abc9c',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        cursor: 'pointer'
-                      }}>
+                      <button 
+                        onClick={() => onNavigateToStudent(student.id, student.name)}
+                        style={{
+                          padding: '6px 12px',
+                          backgroundColor: '#1abc9c',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          fontSize: '12px',
+                          cursor: 'pointer'
+                        }}
+                      >
                         상세보기 →
                       </button>
                     </td>

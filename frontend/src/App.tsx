@@ -3,16 +3,19 @@ import DashboardLayout from './layouts/DashboardLayout';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import ClassListPage from './pages/Class/ClassListPage';
 import ClassDetailPage from './pages/Class/ClassDetailPage';
+import StudentDetailPage from './pages/Class/StudentDetailPage';
 import SchedulePage from './pages/Schedule/SchedulePage';
 import LibraryListPage from './pages/Library/LibraryListPage';
 import PaperDetailPage from './pages/Library/PaperDetailPage';
 
-type PageType = 'dashboard' | 'class' | 'classDetail' | 'schedule' | 'library' | 'paperDetail';
+type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentDetail' | 'schedule' | 'library' | 'paperDetail';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('dashboard');
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [selectedClassName, setSelectedClassName] = useState<string | null>(null);
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [selectedStudentName, setSelectedStudentName] = useState<string | null>(null);
   const [selectedPaperId, setSelectedPaperId] = useState<string | null>(null);
 
   const handleNavigateToClass = (classId: string, className: string) => {
@@ -25,6 +28,18 @@ function App() {
     setCurrentPage('class');
     setSelectedClassId(null);
     setSelectedClassName(null);
+  };
+
+  const handleNavigateToStudent = (studentId: string, studentName: string) => {
+    setSelectedStudentId(studentId);
+    setSelectedStudentName(studentName);
+    setCurrentPage('studentDetail');
+  };
+
+  const handleBackToClassDetail = () => {
+    setCurrentPage('classDetail');
+    setSelectedStudentId(null);
+    setSelectedStudentName(null);
   };
 
   const handleNavigateToPaper = (paperId: string) => {
@@ -48,10 +63,30 @@ function App() {
           <ClassDetailPage 
             classId={selectedClassId} 
             className={selectedClassName}
-            onBack={handleBackToClassList} 
+            onBack={handleBackToClassList}
+            onNavigateToStudent={handleNavigateToStudent}
           />
         ) : (
           <ClassListPage onNavigateToClass={handleNavigateToClass} />
+        );
+      case 'studentDetail':
+        return selectedStudentId && selectedStudentName ? (
+          <StudentDetailPage
+            studentId={selectedStudentId}
+            studentName={selectedStudentName}
+            onBack={handleBackToClassDetail}
+          />
+        ) : (
+          selectedClassId && selectedClassName ? (
+            <ClassDetailPage 
+              classId={selectedClassId} 
+              className={selectedClassName}
+              onBack={handleBackToClassList}
+              onNavigateToStudent={handleNavigateToStudent}
+            />
+          ) : (
+            <ClassListPage onNavigateToClass={handleNavigateToClass} />
+          )
         );
       case 'schedule':
         return <SchedulePage />;
@@ -74,7 +109,8 @@ function App() {
   return (
     <DashboardLayout 
       currentPage={
-        currentPage === 'classDetail' ? 'class' : 
+        currentPage === 'classDetail' ? 'class' :
+        currentPage === 'studentDetail' ? 'class' :
         currentPage === 'paperDetail' ? 'library' : 
         currentPage
       } 
