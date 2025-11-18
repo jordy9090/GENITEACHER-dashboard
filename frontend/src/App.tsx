@@ -76,6 +76,7 @@ function App() {
             className={selectedClassName}
             onBack={handleBackToClassList}
             onNavigateToStudentList={handleNavigateToStudentList}
+            onNavigateToStudent={handleNavigateToStudent}
           />
         ) : (
           <ClassListPage onNavigateToClass={handleNavigateToClass} />
