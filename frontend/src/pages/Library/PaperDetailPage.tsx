@@ -16,8 +16,19 @@ interface StudentPerformance {
   needsCounseling: boolean;
 }
 
+interface ProblemAnalysis {
+  id: string;
+  problemNumber: string;
+  difficulty: '상' | '중' | '하';
+  difficultyColor: string;
+  incorrectRate: string;
+  averageTime: string;
+  concept: string;
+}
+
 function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
   const [activeTab, setActiveTab] = useState(0);
+  const [sortOrder, setSortOrder] = useState<'print' | 'incorrect'>('print');
   const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "인사이트"];
 
   const studentData: StudentPerformance[] = [
@@ -71,6 +82,14 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
       preparedness: "90%",
       needsCounseling: true,
     },
+  ];
+
+  const problemData: ProblemAnalysis[] = [
+    { id: '1', problemNumber: '21번', difficulty: '상', difficultyColor: '#e74c3c', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
+    { id: '2', problemNumber: '21번', difficulty: '중', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
+    { id: '3', problemNumber: '21번', difficulty: '하', difficultyColor: '#9b59b6', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
+    { id: '4', problemNumber: '21번', difficulty: '상', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
+    { id: '5', problemNumber: '21번', difficulty: '상', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
   ];
 
   return (
@@ -814,8 +833,278 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
         )}
 
         {activeTab === 1 && (
-          <div style={{ padding: "40px", textAlign: "center", color: "#999" }}>
-            문제별 분석 내용이 여기에 표시됩니다.
+          <div>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              marginBottom: '20px'
+            }}>
+              <h3 style={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#2c3e50',
+                margin: 0
+              }}>
+                문제별 상세 분석
+              </h3>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setSortOrder('print')}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: sortOrder === 'print' ? '#20c997' : 'white',
+                    border: sortOrder === 'print' ? 'none' : '1px solid #e0e0e0',
+                    borderRadius: '6px',
+                    color: sortOrder === 'print' ? 'white' : '#666',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    cursor: 'pointer'
+                  }}
+                >
+                  인쇄순 정렬
+                </button>
+                <button
+                  onClick={() => setSortOrder('incorrect')}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: sortOrder === 'incorrect' ? '#20c997' : 'white',
+                    border: sortOrder === 'incorrect' ? 'none' : '1px solid #e0e0e0',
+                    borderRadius: '6px',
+                    color: sortOrder === 'incorrect' ? 'white' : '#666',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    cursor: 'pointer'
+                  }}
+                >
+                  모작순 정렬
+                </button>
+              </div>
+            </div>
+
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{
+                width: '100%',
+                borderCollapse: 'collapse'
+              }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      문항 ▼
+                    </th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      난이도 ▼
+                    </th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      오답률 ▼
+                    </th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      평균 풀이시간 ▼
+                    </th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'left',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      출제 개념 ▼
+                    </th>
+                    <th style={{
+                      padding: '12px 16px',
+                      textAlign: 'center',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      color: '#666'
+                    }}>
+                      액션 ▼
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {problemData.map((problem) => (
+                    <tr
+                      key={problem.id}
+                      style={{
+                        borderBottom: '1px solid #f0f0f0',
+                        transition: 'background-color 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#f8f9fa';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      <td style={{ padding: '16px' }}>
+                        <div style={{
+                          fontSize: '14px',
+                          color: '#20c997',
+                          fontWeight: '500'
+                        }}>
+                          {problem.problemNumber}
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px' }}>
+                        <span style={{
+                          padding: '4px 12px',
+                          borderRadius: '4px',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          color: 'white',
+                          backgroundColor: problem.difficultyColor
+                        }}>
+                          {problem.difficulty}
+                        </span>
+                      </td>
+                      <td style={{ padding: '16px' }}>
+                        <div style={{
+                          fontSize: '14px',
+                          color: '#e74c3c',
+                          fontWeight: '500'
+                        }}>
+                          {problem.incorrectRate}
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px' }}>
+                        <div style={{
+                          fontSize: '14px',
+                          color: '#2c3e50'
+                        }}>
+                          {problem.averageTime}
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px' }}>
+                        <div style={{
+                          fontSize: '14px',
+                          color: '#2c3e50'
+                        }}>
+                          {problem.concept}
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px', textAlign: 'center' }}>
+                        <button style={{
+                          padding: '6px 16px',
+                          backgroundColor: '#20c997',
+                          border: 'none',
+                          borderRadius: '4px',
+                          color: 'white',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          margin: '0 auto'
+                        }}>
+                          상세보기 +
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '8px',
+              marginTop: '24px'
+            }}>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                color: '#666',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}>
+                ← Previous
+              </button>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: '#20c997',
+                border: 'none',
+                borderRadius: '4px',
+                color: 'white',
+                fontSize: '13px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}>
+                1
+              </button>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                color: '#666',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}>
+                2
+              </button>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                color: '#666',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}>
+                3
+              </button>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                color: '#666',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}>
+                ...
+              </button>
+              <button style={{
+                padding: '8px 12px',
+                backgroundColor: 'transparent',
+                border: '1px solid #e0e0e0',
+                borderRadius: '4px',
+                color: '#666',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}>
+                Next →
+              </button>
+            </div>
           </div>
         )}
 
