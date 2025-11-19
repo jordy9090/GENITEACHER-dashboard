@@ -19,7 +19,7 @@ interface StudentPerformance {
 interface ProblemAnalysis {
   id: string;
   problemNumber: string;
-  difficulty: '상' | '중' | '하';
+  difficulty: "상" | "중" | "하";
   difficultyColor: string;
   incorrectRate: string;
   averageTime: string;
@@ -28,7 +28,8 @@ interface ProblemAnalysis {
 
 function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
   const [activeTab, setActiveTab] = useState(0);
-  const [sortOrder, setSortOrder] = useState<'print' | 'incorrect'>('print');
+  const [sortOrder, setSortOrder] = useState<"print" | "incorrect">("print");
+  const [selectedProblem, setSelectedProblem] = useState<ProblemAnalysis | null>(null);
   const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "인사이트"];
 
   const studentData: StudentPerformance[] = [
@@ -85,11 +86,51 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
   ];
 
   const problemData: ProblemAnalysis[] = [
-    { id: '1', problemNumber: '21번', difficulty: '상', difficultyColor: '#e74c3c', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
-    { id: '2', problemNumber: '21번', difficulty: '중', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
-    { id: '3', problemNumber: '21번', difficulty: '하', difficultyColor: '#9b59b6', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
-    { id: '4', problemNumber: '21번', difficulty: '상', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
-    { id: '5', problemNumber: '21번', difficulty: '상', difficultyColor: '#20c997', incorrectRate: '4/4', averageTime: '12분 3초', concept: '정적분의 활용' },
+    {
+      id: "1",
+      problemNumber: "21번",
+      difficulty: "상",
+      difficultyColor: "#e74c3c",
+      incorrectRate: "4/4",
+      averageTime: "12분 3초",
+      concept: "정적분의 활용",
+    },
+    {
+      id: "2",
+      problemNumber: "21번",
+      difficulty: "중",
+      difficultyColor: "#20c997",
+      incorrectRate: "4/4",
+      averageTime: "12분 3초",
+      concept: "정적분의 활용",
+    },
+    {
+      id: "3",
+      problemNumber: "21번",
+      difficulty: "하",
+      difficultyColor: "#9b59b6",
+      incorrectRate: "4/4",
+      averageTime: "12분 3초",
+      concept: "정적분의 활용",
+    },
+    {
+      id: "4",
+      problemNumber: "21번",
+      difficulty: "상",
+      difficultyColor: "#20c997",
+      incorrectRate: "4/4",
+      averageTime: "12분 3초",
+      concept: "정적분의 활용",
+    },
+    {
+      id: "5",
+      problemNumber: "21번",
+      difficulty: "상",
+      difficultyColor: "#20c997",
+      incorrectRate: "4/4",
+      averageTime: "12분 3초",
+      concept: "정적분의 활용",
+    },
   ];
 
   return (
@@ -834,113 +875,135 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
 
         {activeTab === 1 && (
           <div>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              marginBottom: '20px'
-            }}>
-              <h3 style={{
-                fontSize: '16px',
-                fontWeight: '600',
-                color: '#2c3e50',
-                margin: 0
-              }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  color: "#2c3e50",
+                  margin: 0,
+                }}
+              >
                 문제별 상세 분석
               </h3>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: "flex", gap: "8px" }}>
                 <button
-                  onClick={() => setSortOrder('print')}
+                  onClick={() => setSortOrder("print")}
                   style={{
-                    padding: '8px 16px',
-                    backgroundColor: sortOrder === 'print' ? '#20c997' : 'white',
-                    border: sortOrder === 'print' ? 'none' : '1px solid #e0e0e0',
-                    borderRadius: '6px',
-                    color: sortOrder === 'print' ? 'white' : '#666',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    cursor: 'pointer'
+                    padding: "8px 16px",
+                    backgroundColor:
+                      sortOrder === "print" ? "#20c997" : "white",
+                    border:
+                      sortOrder === "print" ? "none" : "1px solid #e0e0e0",
+                    borderRadius: "6px",
+                    color: sortOrder === "print" ? "white" : "#666",
+                    fontSize: "13px",
+                    fontWeight: "500",
+                    cursor: "pointer",
                   }}
                 >
-                  인쇄순 정렬
+                  빈출순 정렬
                 </button>
                 <button
-                  onClick={() => setSortOrder('incorrect')}
+                  onClick={() => setSortOrder("incorrect")}
                   style={{
-                    padding: '8px 16px',
-                    backgroundColor: sortOrder === 'incorrect' ? '#20c997' : 'white',
-                    border: sortOrder === 'incorrect' ? 'none' : '1px solid #e0e0e0',
-                    borderRadius: '6px',
-                    color: sortOrder === 'incorrect' ? 'white' : '#666',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    cursor: 'pointer'
+                    padding: "8px 16px",
+                    backgroundColor:
+                      sortOrder === "incorrect" ? "#20c997" : "white",
+                    border:
+                      sortOrder === "incorrect" ? "none" : "1px solid #e0e0e0",
+                    borderRadius: "6px",
+                    color: sortOrder === "incorrect" ? "white" : "#666",
+                    fontSize: "13px",
+                    fontWeight: "500",
+                    cursor: "pointer",
                   }}
                 >
-                  모작순 정렬
+                  오답순 정렬
                 </button>
               </div>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse'
-              }}>
+            <div style={{ overflowX: "auto" }}>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                }}
+              >
                 <thead>
-                  <tr style={{ borderBottom: '2px solid #e0e0e0' }}>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'left',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                  <tr style={{ borderBottom: "2px solid #e0e0e0" }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "left",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       문항 ▼
                     </th>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'left',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "left",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       난이도 ▼
                     </th>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'left',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "left",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       오답률 ▼
                     </th>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'left',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "left",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       평균 풀이시간 ▼
                     </th>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'left',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "left",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       출제 개념 ▼
                     </th>
-                    <th style={{
-                      padding: '12px 16px',
-                      textAlign: 'center',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      color: '#666'
-                    }}>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "center",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
                       액션 ▼
                     </th>
                   </tr>
@@ -950,77 +1013,90 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
                     <tr
                       key={problem.id}
                       style={{
-                        borderBottom: '1px solid #f0f0f0',
-                        transition: 'background-color 0.2s'
+                        borderBottom: "1px solid #f0f0f0",
+                        transition: "background-color 0.2s",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f8f9fa';
+                        e.currentTarget.style.backgroundColor = "#f8f9fa";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.backgroundColor = "transparent";
                       }}
                     >
-                      <td style={{ padding: '16px' }}>
-                        <div style={{
-                          fontSize: '14px',
-                          color: '#20c997',
-                          fontWeight: '500'
-                        }}>
+                      <td style={{ padding: "16px" }}>
+                        <div
+                          style={{
+                            fontSize: "14px",
+                            color: "#20c997",
+                            fontWeight: "500",
+                          }}
+                        >
                           {problem.problemNumber}
                         </div>
                       </td>
-                      <td style={{ padding: '16px' }}>
-                        <span style={{
-                          padding: '4px 12px',
-                          borderRadius: '4px',
-                          fontSize: '13px',
-                          fontWeight: '500',
-                          color: 'white',
-                          backgroundColor: problem.difficultyColor
-                        }}>
+                      <td style={{ padding: "16px" }}>
+                        <span
+                          style={{
+                            padding: "4px 12px",
+                            borderRadius: "4px",
+                            fontSize: "13px",
+                            fontWeight: "500",
+                            color: "white",
+                            backgroundColor: problem.difficultyColor,
+                          }}
+                        >
                           {problem.difficulty}
                         </span>
                       </td>
-                      <td style={{ padding: '16px' }}>
-                        <div style={{
-                          fontSize: '14px',
-                          color: '#e74c3c',
-                          fontWeight: '500'
-                        }}>
+                      <td style={{ padding: "16px" }}>
+                        <div
+                          style={{
+                            fontSize: "14px",
+                            color: "#e74c3c",
+                            fontWeight: "500",
+                          }}
+                        >
                           {problem.incorrectRate}
                         </div>
                       </td>
-                      <td style={{ padding: '16px' }}>
-                        <div style={{
-                          fontSize: '14px',
-                          color: '#2c3e50'
-                        }}>
+                      <td style={{ padding: "16px" }}>
+                        <div
+                          style={{
+                            fontSize: "14px",
+                            color: "#2c3e50",
+                          }}
+                        >
                           {problem.averageTime}
                         </div>
                       </td>
-                      <td style={{ padding: '16px' }}>
-                        <div style={{
-                          fontSize: '14px',
-                          color: '#2c3e50'
-                        }}>
+                      <td style={{ padding: "16px" }}>
+                        <div
+                          style={{
+                            fontSize: "14px",
+                            color: "#2c3e50",
+                          }}
+                        >
                           {problem.concept}
                         </div>
                       </td>
-                      <td style={{ padding: '16px', textAlign: 'center' }}>
-                        <button style={{
-                          padding: '6px 16px',
-                          backgroundColor: '#20c997',
-                          border: 'none',
-                          borderRadius: '4px',
-                          color: 'white',
-                          fontSize: '13px',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          margin: '0 auto'
-                        }}>
+                      <td style={{ padding: "16px", textAlign: "center" }}>
+                        <button
+                          onClick={() => setSelectedProblem(problem)}
+                          style={{
+                            padding: "6px 16px",
+                            backgroundColor: "#20c997",
+                            border: "none",
+                            borderRadius: "4px",
+                            color: "white",
+                            fontSize: "13px",
+                            fontWeight: "500",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            margin: "0 auto",
+                          }}
+                        >
                           상세보기 +
                         </button>
                       </td>
@@ -1030,78 +1106,92 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
               </table>
             </div>
 
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '8px',
-              marginTop: '24px'
-            }}>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px',
-                color: '#666',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "8px",
+                marginTop: "24px",
+              }}
+            >
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  color: "#666",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                }}
+              >
                 ← Previous
               </button>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: '#20c997',
-                border: 'none',
-                borderRadius: '4px',
-                color: 'white',
-                fontSize: '13px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}>
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "#20c997",
+                  border: "none",
+                  borderRadius: "4px",
+                  color: "white",
+                  fontSize: "13px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                }}
+              >
                 1
               </button>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px',
-                color: '#666',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}>
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  color: "#666",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                }}
+              >
                 2
               </button>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px',
-                color: '#666',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}>
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  color: "#666",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                }}
+              >
                 3
               </button>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px',
-                color: '#666',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}>
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  color: "#666",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                }}
+              >
                 ...
               </button>
-              <button style={{
-                padding: '8px 12px',
-                backgroundColor: 'transparent',
-                border: '1px solid #e0e0e0',
-                borderRadius: '4px',
-                color: '#666',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}>
+              <button
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "transparent",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  color: "#666",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                }}
+              >
                 Next →
               </button>
             </div>
@@ -1120,6 +1210,274 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
           </div>
         )}
       </div>
+
+      {selectedProblem && (
+        <div
+          onClick={() => setSelectedProblem(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              padding: '32px',
+              width: '90%',
+              maxWidth: '500px',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              marginBottom: '24px',
+              marginTop: 0
+            }}>
+              {selectedProblem.problemNumber} 문제 상세 분석
+            </h2>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px',
+              marginBottom: '24px'
+            }}>
+              <div style={{
+                backgroundColor: '#fee',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  fontSize: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  📄
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#999',
+                    marginBottom: '4px'
+                  }}>
+                    문제 난이도
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#e74c3c'
+                  }}>
+                    최상
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                backgroundColor: '#e0f7fa',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  fontSize: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  💡
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#999',
+                    marginBottom: '4px'
+                  }}>
+                    틀은 개념
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#20c997'
+                  }}>
+                    {selectedProblem.concept}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                backgroundColor: '#e3f2fd',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  fontSize: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  😊
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#999',
+                    marginBottom: '4px'
+                  }}>
+                    오답 인원
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#2196f3'
+                  }}>
+                    28/29
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                backgroundColor: '#f3e5f5',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  fontSize: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  ⏰
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#999',
+                    marginBottom: '4px'
+                  }}>
+                    평균 시간
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#9c27b0'
+                  }}>
+                    {selectedProblem.averageTime}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              backgroundColor: '#f0f8ff',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '16px'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '12px'
+              }}>
+                <div style={{ fontSize: '20px' }}>📋</div>
+                <h3 style={{
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  margin: 0
+                }}>
+                  문제 내용
+                </h3>
+              </div>
+              <p style={{
+                fontSize: '14px',
+                color: '#555',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                수직선 위에서 집 P의 위치 x가 다음 조건을 만족하는 미분방정식을 구하는 문제입니다. 변위와 속도의 관계를 이용하여 미분계수의 활용을 묻고 있습니다.
+              </p>
+            </div>
+
+            <div style={{
+              backgroundColor: '#fff0f0',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '24px'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '12px'
+              }}>
+                <div style={{ fontSize: '20px' }}>🎯</div>
+                <h3 style={{
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  margin: 0
+                }}>
+                  주요 오답 원인
+                </h3>
+              </div>
+              <ul style={{
+                fontSize: '14px',
+                color: '#555',
+                lineHeight: '1.8',
+                margin: 0,
+                paddingLeft: '20px'
+              }}>
+                <li>미분계수의 물리적 의미 이해 부족</li>
+                <li>변수 분리 과정에서의 계산 실수</li>
+                <li>초기 조건 적용 오류</li>
+              </ul>
+            </div>
+
+            <button
+              onClick={() => setSelectedProblem(null)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#20c997',
+                border: 'none',
+                borderRadius: '8px',
+                color: 'white',
+                fontSize: '15px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
