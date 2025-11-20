@@ -11,12 +11,13 @@ interface PaperDetailPageProps {
 interface StudentPerformance {
   id: string;
   name: string;
-  email: string;
-  progress: string;
+  className: string;
+  time: string;
   correctRate: string;
-  usageRate: string;
-  preparedness: string;
-  needsCounseling: boolean;
+  hintUsage: string;
+  metacognition: string;
+  wrongNoteCompleted: boolean;
+  status: "완료" | "관심필요";
 }
 
 interface ProblemAnalysis {
@@ -42,7 +43,13 @@ interface StudentSolutionData {
   learningPoints: string[];
 }
 
-function PaperDetailPage({ paperId, subject, title, description, onBack }: PaperDetailPageProps) {
+function PaperDetailPage({
+  paperId,
+  subject,
+  title,
+  description,
+  onBack,
+}: PaperDetailPageProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [sortOrder, setSortOrder] = useState<"print" | "incorrect">("print");
   const [selectedProblem, setSelectedProblem] =
@@ -55,52 +62,57 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
     {
       id: "1",
       name: "김현성",
-      email: "jane.cooper@example.com",
-      progress: "8회차 3.4초",
+      className: "3학년 7반",
+      time: "88번 34초",
       correctRate: "87%",
-      usageRate: "66%",
-      preparedness: "90%",
-      needsCounseling: false,
+      hintUsage: "66%",
+      metacognition: "90%",
+      wrongNoteCompleted: true,
+      status: "완료",
     },
     {
       id: "2",
       name: "강민성",
-      email: "jane.cooper@example.com",
-      progress: "8회차 3.4초",
+      className: "3학년 7반",
+      time: "88번 34초",
       correctRate: "87%",
-      usageRate: "66%",
-      preparedness: "90%",
-      needsCounseling: false,
+      hintUsage: "66%",
+      metacognition: "90%",
+      wrongNoteCompleted: true,
+      status: "완료",
     },
     {
       id: "3",
       name: "김현성",
-      email: "jane.cooper@example.com",
-      progress: "8회차 3.4초",
+      className: "3학년 7반",
+      time: "88번 34초",
       correctRate: "87%",
-      usageRate: "66%",
-      preparedness: "90%",
-      needsCounseling: false,
+      hintUsage: "66%",
+      metacognition: "90%",
+      wrongNoteCompleted: true,
+      status: "완료",
     },
     {
       id: "4",
       name: "강민성",
-      email: "jane.cooper@example.com",
-      progress: "8회차 3.4초",
+      className: "3학년 7반",
+      time: "88번 34초",
       correctRate: "87%",
-      usageRate: "66%",
-      preparedness: "90%",
-      needsCounseling: false,
+      hintUsage: "66%",
+      metacognition: "90%",
+      wrongNoteCompleted: true,
+      status: "완료",
     },
     {
       id: "5",
       name: "김현성",
-      email: "jane.cooper@example.com",
-      progress: "8회차 3.4초",
+      className: "3학년 7반",
+      time: "88번 34초",
       correctRate: "87%",
-      usageRate: "66%",
-      preparedness: "90%",
-      needsCounseling: true,
+      hintUsage: "66%",
+      metacognition: "90%",
+      wrongNoteCompleted: false,
+      status: "관심필요",
     },
   ];
 
@@ -246,13 +258,22 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
           }}
         >
           <div style={{ flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "8px",
+              }}
+            >
               <span style={{ fontSize: "16px" }}>⭐</span>
               <h1 style={{ fontSize: "24px", fontWeight: "600", margin: 0 }}>
                 {title}
               </h1>
             </div>
-            <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#666" }}>
+            <p
+              style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#666" }}
+            >
               {description}
             </p>
             <div style={{ display: "flex", gap: "8px" }}>
@@ -330,7 +351,9 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
               padding: "16px",
             }}
           >
-            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
+            >
               출제일시
             </div>
             <div
@@ -346,7 +369,9 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
               padding: "16px",
             }}
           >
-            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
+            >
               문제 수
             </div>
             <div
@@ -362,7 +387,9 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
               padding: "16px",
             }}
           >
-            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
+            >
               정답률
             </div>
             <div
@@ -378,7 +405,9 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
               padding: "16px",
             }}
           >
-            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+            <div
+              style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
+            >
               평균 소요시간
             </div>
             <div
@@ -621,12 +650,13 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
             marginBottom: "24px",
           }}
         >
-          <div style={{ display: "flex", gap: "32px" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: "0" }}>
             {tabs.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(index)}
                 style={{
+                  flex: 1, // 각 버튼이 동일한 너비 차지
                   padding: "12px 0",
                   backgroundColor: "transparent",
                   border: "none",
@@ -653,11 +683,11 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
               style={{
                 fontSize: "16px",
                 fontWeight: "600",
-                color: "#2c3e50",
+                color: "#0891B2",
                 marginBottom: "16px",
               }}
             >
-              개별 학생 성과 리포트
+              개별 학생 성취 현황
             </h3>
 
             <div style={{ overflowX: "auto" }}>
@@ -683,13 +713,13 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                     <th
                       style={{
                         padding: "12px 16px",
-                        textAlign: "left",
+                        textAlign: "center",
                         fontSize: "13px",
                         fontWeight: "500",
                         color: "#666",
                       }}
                     >
-                      학습 경과 ▼
+                      시간 ▼
                     </th>
                     <th
                       style={{
@@ -700,7 +730,18 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                         color: "#666",
                       }}
                     >
-                      문제 사용 빈도 ▼
+                      정답률 ▼
+                    </th>
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "center",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        color: "#666",
+                      }}
+                    >
+                      힌트 사용 빈도 ▼
                     </th>
                     <th
                       style={{
@@ -722,7 +763,7 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                         color: "#666",
                       }}
                     >
-                      상담필요 ▼
+                      오답노트 ▼
                     </th>
                     <th
                       style={{
@@ -733,7 +774,7 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                         color: "#666",
                       }}
                     >
-                      세부 ▼
+                      상태 ▼
                     </th>
                   </tr>
                 </thead>
@@ -787,14 +828,14 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                               {student.name}
                             </div>
                             <div style={{ fontSize: "12px", color: "#999" }}>
-                              {student.email}
+                              {student.className}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding: "16px" }}>
+                      <td style={{ padding: "16px", textAlign: "center" }}>
                         <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.progress}
+                          {student.time}
                         </div>
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
@@ -810,52 +851,41 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
                         <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.usageRate}
+                          {student.hintUsage}
                         </div>
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
                         <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.preparedness}
+                          {student.metacognition}
                         </div>
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
-                        {student.needsCounseling ? (
-                          <span
-                            style={{
-                              color: "#e91e63",
-                              fontSize: "14px",
-                              fontWeight: "500",
-                            }}
-                          >
-                            ✕ 상담필요
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              width: "8px",
-                              height: "8px",
-                              borderRadius: "50%",
-                              backgroundColor: "#20c997",
-                              display: "inline-block",
-                            }}
-                          ></span>
-                        )}
-                      </td>
-                      <td style={{ padding: "16px", textAlign: "center" }}>
-                        <button
+                        <div
                           style={{
-                            padding: "6px 16px",
-                            backgroundColor: "white",
-                            border: "1px solid #20c997",
-                            borderRadius: "4px",
-                            color: "#20c997",
-                            fontSize: "13px",
-                            fontWeight: "500",
-                            cursor: "pointer",
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "50%",
+                            backgroundColor: student.wrongNoteCompleted ? "#20c997" : "#e0e0e0",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
-                          상세
-                        </button>
+                          {student.wrongNoteCompleted && (
+                            <span style={{ color: "white", fontSize: "12px" }}>✓</span>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ padding: "16px", textAlign: "center" }}>
+                        <span
+                          style={{
+                            color: student.status === "완료" ? "#20c997" : "#e74c3c",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {student.status}
+                        </span>
                       </td>
                     </tr>
                   ))}
