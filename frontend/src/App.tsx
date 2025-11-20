@@ -5,11 +5,12 @@ import ClassListPage from './pages/Class/ClassListPage';
 import ClassDetailPage from './pages/Class/ClassDetailPage';
 import StudentListPage from './pages/Class/StudentListPage';
 import StudentDetailPage from './pages/Class/StudentDetailPage';
+import AchievementAnalysisPage from './pages/Class/AchievementAnalysisPage';
 import SchedulePage from './pages/Schedule/SchedulePage';
 import LibraryListPage from './pages/Library/LibraryListPage';
 import PaperDetailPage from './pages/Library/PaperDetailPage';
 
-type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'schedule' | 'library' | 'paperDetail';
+type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'achievementAnalysis' | 'schedule' | 'library' | 'paperDetail';
 
 interface PaperInfo {
   id: string;
@@ -25,12 +26,6 @@ function App() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState<string | null>(null);
   const [selectedPaperInfo, setSelectedPaperInfo] = useState<PaperInfo | null>(null);
-
-  const handleNavigateToClass = (classId: string, className: string) => {
-    setSelectedClassId(classId);
-    setSelectedClassName(className);
-    setCurrentPage('classDetail');
-  };
 
   const handleBackToClassList = () => {
     setCurrentPage('class');
@@ -64,6 +59,16 @@ function App() {
     setSelectedStudentName(null);
   };
 
+  const handleNavigateToAchievementAnalysis = (classId: string, className: string) => {
+    setSelectedClassId(classId);
+    setSelectedClassName(className);
+    setCurrentPage('achievementAnalysis');
+  };
+
+  const handleBackToClassDetailFromAchievement = () => {
+    setCurrentPage('classDetail');
+  };
+
   const handleNavigateToPaper = (paperInfo: PaperInfo) => {
     setSelectedPaperInfo(paperInfo);
     setCurrentPage('paperDetail');
@@ -79,10 +84,7 @@ function App() {
       case 'dashboard':
         return <DashboardPage />;
       case 'class':
-        return <ClassListPage 
-          onNavigateToClass={handleNavigateToClass}
-          onNavigateToStudentList={handleNavigateToStudentList}
-        />;
+        return <ClassListPage />;
       case 'classDetail':
         return selectedClassId && selectedClassName ? (
           <ClassDetailPage 
@@ -91,9 +93,10 @@ function App() {
             onBack={handleBackToClassList}
             onNavigateToStudentList={handleNavigateToStudentList}
             onNavigateToStudent={handleNavigateToStudent}
+            onNavigateToAchievementAnalysis={handleNavigateToAchievementAnalysis}
           />
         ) : (
-          <ClassListPage onNavigateToClass={handleNavigateToClass} />
+          <ClassListPage />
         );
       case 'studentList':
         return selectedClassId && selectedClassName ? (
@@ -104,7 +107,7 @@ function App() {
             onNavigateToStudent={handleNavigateToStudent}
           />
         ) : (
-          <ClassListPage onNavigateToClass={handleNavigateToClass} />
+          <ClassListPage />
         );
       case 'studentDetail':
         return selectedStudentId && selectedStudentName ? (
@@ -122,8 +125,18 @@ function App() {
               onNavigateToStudent={handleNavigateToStudent}
             />
           ) : (
-            <ClassListPage onNavigateToClass={handleNavigateToClass} />
+            <ClassListPage />
           )
+        );
+      case 'achievementAnalysis':
+        return selectedClassId && selectedClassName ? (
+          <AchievementAnalysisPage
+            classId={selectedClassId}
+            className={selectedClassName}
+            onBack={handleBackToClassDetailFromAchievement}
+          />
+        ) : (
+          <ClassListPage />
         );
       case 'schedule':
         return <SchedulePage />;
@@ -152,6 +165,7 @@ function App() {
         currentPage === 'classDetail' ? 'class' :
         currentPage === 'studentList' ? 'class' :
         currentPage === 'studentDetail' ? 'class' :
+        currentPage === 'achievementAnalysis' ? 'class' :
         currentPage === 'paperDetail' ? 'library' : 
         currentPage
       } 
