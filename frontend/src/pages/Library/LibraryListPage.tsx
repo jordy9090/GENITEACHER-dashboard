@@ -36,7 +36,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
   const papers: Paper[] = [
     {
       id: '1',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -48,7 +48,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '2',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -60,7 +60,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '3',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -72,7 +72,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '4',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -84,7 +84,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '5',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -96,7 +96,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '6',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -108,7 +108,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '7',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
@@ -120,7 +120,7 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
     },
     {
       id: '8',
-      imageUrl: '/api/placeholder/400/560',
+      imageUrl: '/paper-math.png',
       subject: '수학',
       title: '수학 영역(나 형)',
       description: '2018년 9월 3일 모의고사 문제지',
