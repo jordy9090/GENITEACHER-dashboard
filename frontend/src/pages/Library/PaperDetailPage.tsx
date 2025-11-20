@@ -26,10 +26,25 @@ interface ProblemAnalysis {
   concept: string;
 }
 
+interface StudentSolutionData {
+  id: string;
+  studentName: string;
+  className: string;
+  solveTime: string;
+  status: string;
+  statusColor: string;
+  handwritingImage: string;
+  wrongReason: string;
+  errorPatterns: string[];
+  learningPoints: string[];
+}
+
 function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [sortOrder, setSortOrder] = useState<"print" | "incorrect">("print");
-  const [selectedProblem, setSelectedProblem] = useState<ProblemAnalysis | null>(null);
+  const [selectedProblem, setSelectedProblem] =
+    useState<ProblemAnalysis | null>(null);
+  const [selectedProblemForAnalysis, setSelectedProblemForAnalysis] = useState("21번");
   const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "인사이트"];
 
   const studentData: StudentPerformance[] = [
@@ -131,6 +146,49 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
       averageTime: "12분 3초",
       concept: "정적분의 활용",
     },
+  ];
+
+  const studentSolutions: StudentSolutionData[] = [
+    {
+      id: "1",
+      studentName: "학생1",
+      className: "3반 24번",
+      solveTime: "문제 시간 9분",
+      status: "틀림",
+      statusColor: "#e74c3c",
+      handwritingImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23f9f9f9' width='300' height='200'/%3E%3Ctext x='10' y='30' font-family='Arial' font-size='14' fill='%23333'%3ELet s=%C2%B0%3C/text%3E%3Ctext x='10' y='50' font-family='Arial' font-size='14' fill='%23333'%3E∂f%C2%B0x = sx + ★ → ∫wx ξ%3C/text%3E%3Ctext x='10' y='70' font-family='Arial' font-size='14' fill='%23333'%3E∂L%C2%B0s st x%C2%B0L → ∫wx ξ%3C/text%3E%3Ctext x='10' y='100' font-family='Arial' font-size='14' fill='%23f39c12'%3E∂(wx(L,K)) x² + sx(L,K)* ∫ws f(wx)%3C/text%3E%3Ctext x='10' y='120' font-family='Arial' font-size='14' fill='%23333'%3Eby 부분적분%3C/text%3E%3Ctext x='10' y='150' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) → [sx wx F: → ∫ws = 0%3C/text%3E%3Ctext x='10' y='170' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) Let s=f(wx)%3C/text%3E%3C/svg%3E",
+      wrongReason: "변수와 계산 이해",
+      errorPatterns: [
+        "미분계수의 기본 개념 복습 필요",
+        "연쇄법칙 적용 연습 권장",
+        "계산 연습은 안성 중요"
+      ],
+      learningPoints: [
+        "적분의 정의와 초기 계산 복습 권장",
+        "미분식의 기하학적 의미 이해",
+        "심화 분제 반복 연습"
+      ]
+    },
+    {
+      id: "2",
+      studentName: "학생2",
+      className: "3반 25번",
+      solveTime: "문제 시간 9분",
+      status: "힌트있슴",
+      statusColor: "#f39c12",
+      handwritingImage: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23f9f9f9' width='300' height='200'/%3E%3Ctext x='10' y='30' font-family='Arial' font-size='14' fill='%23333'%3ELet s=%C2%B0%3C/text%3E%3Ctext x='10' y='50' font-family='Arial' font-size='14' fill='%23333'%3E∂f%C2%B0x = sx + ★ → ∫wx ξ%3C/text%3E%3Ctext x='10' y='70' font-family='Arial' font-size='14' fill='%23333'%3E∂L%C2%B0s st x%C2%B0L → ∫wx ξ%3C/text%3E%3Ctext x='10' y='100' font-family='Arial' font-size='14' fill='%23f39c12'%3E∂(wx(L,K)) x² + sx(L,K)* ∫ws f(wx)%3C/text%3E%3Ctext x='10' y='120' font-family='Arial' font-size='14' fill='%23333'%3Eby 부분적분%3C/text%3E%3Ctext x='10' y='150' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) → [sx wx F: → ∫ws = 0%3C/text%3E%3Ctext x='10' y='170' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) Let s=f(wx)%3C/text%3E%3C/svg%3E",
+      wrongReason: "항수와 극값 조건을 초기값 방법",
+      errorPatterns: [
+        "극값의 정의와 초기 재산 필요",
+        "미분식의 기하학적 의미 이해",
+        "심화 분제 반복 연습"
+      ],
+      learningPoints: [
+        "극값의 정의와 초기 재산 필요",
+        "미분식의 기하학적 의미 이해",
+        "심화 분제 반복 연습"
+      ]
+    }
   ];
 
   return (
@@ -1199,8 +1257,211 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
         )}
 
         {activeTab === 2 && (
-          <div style={{ padding: "40px", textAlign: "center", color: "#999" }}>
-            개별 분석 내용이 여기에 표시됩니다.
+          <div>
+            <div style={{ marginBottom: '20px' }}>
+              <select
+                value={selectedProblemForAnalysis}
+                onChange={(e) => setSelectedProblemForAnalysis(e.target.value)}
+                style={{
+                  padding: '10px 16px',
+                  fontSize: '14px',
+                  borderRadius: '6px',
+                  border: '1px solid #e0e0e0',
+                  backgroundColor: 'white',
+                  cursor: 'pointer',
+                  minWidth: '150px'
+                }}
+              >
+                <option value="21번">21번</option>
+                <option value="22번">22번</option>
+                <option value="23번">23번</option>
+              </select>
+            </div>
+
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
+              gap: '20px'
+            }}>
+              {studentSolutions.map((solution) => (
+                <div key={solution.id} style={{
+                  backgroundColor: 'white',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '16px',
+                      fontWeight: '600'
+                    }}>
+                      {solution.studentName.slice(-1)}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{
+                        margin: 0,
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#2c3e50'
+                      }}>
+                        {solution.studentName}
+                      </h3>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginTop: '4px',
+                        fontSize: '13px',
+                        color: '#666'
+                      }}>
+                        <span>{solution.className}</span>
+                        <span>•</span>
+                        <span>{solution.solveTime}</span>
+                        <span>•</span>
+                        <span style={{ color: solution.statusColor, fontWeight: '500' }}>
+                          {solution.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    backgroundColor: '#f9f9f9',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    marginBottom: '16px',
+                    minHeight: '200px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
+                  }}>
+                    <img 
+                      src={solution.handwritingImage} 
+                      alt="학생 풀이"
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto'
+                      }}
+                    />
+                  </div>
+
+                  <div style={{
+                    backgroundColor: '#fff0f5',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginBottom: '8px'
+                    }}>
+                      <div style={{ fontSize: '18px' }}>❌</div>
+                      <h4 style={{
+                        margin: 0,
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#e74c3c'
+                      }}>
+                        틀린 이유
+                      </h4>
+                    </div>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '13px',
+                      color: '#555',
+                      lineHeight: '1.5'
+                    }}>
+                      • {solution.wrongReason}
+                    </p>
+                  </div>
+
+                  <div style={{
+                    backgroundColor: '#fffbea',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginBottom: '8px'
+                    }}>
+                      <div style={{ fontSize: '18px' }}>⚠️</div>
+                      <h4 style={{
+                        margin: 0,
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#f39c12'
+                      }}>
+                        주요 오류 패턴
+                      </h4>
+                    </div>
+                    <ul style={{
+                      margin: 0,
+                      paddingLeft: '20px',
+                      fontSize: '13px',
+                      color: '#555',
+                      lineHeight: '1.8'
+                    }}>
+                      {solution.errorPatterns.map((pattern, idx) => (
+                        <li key={idx}>{pattern}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div style={{
+                    backgroundColor: '#e0f7fa',
+                    borderRadius: '8px',
+                    padding: '12px'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      marginBottom: '8px'
+                    }}>
+                      <div style={{ fontSize: '18px' }}>💡</div>
+                      <h4 style={{
+                        margin: 0,
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#20c997'
+                      }}>
+                        학습 제안 포인트
+                      </h4>
+                    </div>
+                    <ul style={{
+                      margin: 0,
+                      paddingLeft: '20px',
+                      fontSize: '13px',
+                      color: '#555',
+                      lineHeight: '1.8'
+                    }}>
+                      {solution.learningPoints.map((point, idx) => (
+                        <li key={idx}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -1215,244 +1476,297 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
         <div
           onClick={() => setSelectedProblem(null)}
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000
+            backgroundColor: "rgba(200, 200, 200, 0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '32px',
-              width: '90%',
-              maxWidth: '500px',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+              backgroundColor: "white",
+              borderRadius: "16px",
+              padding: "32px",
+              width: "90%",
+              maxWidth: "500px",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
             }}
           >
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: '700',
-              color: '#2c3e50',
-              marginBottom: '24px',
-              marginTop: 0
-            }}>
+            <h2
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                color: "#2c3e50",
+                marginBottom: "24px",
+                marginTop: 0,
+              }}
+            >
               {selectedProblem.problemNumber} 문제 상세 분석
             </h2>
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '12px',
-              marginBottom: '24px'
-            }}>
-              <div style={{
-                backgroundColor: '#fee',
-                borderRadius: '12px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <div style={{
-                  fontSize: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "12px",
+                marginBottom: "24px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#fee",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   📄
                 </div>
                 <div>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#999',
-                    marginBottom: '4px'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#999",
+                      marginBottom: "4px",
+                    }}
+                  >
                     문제 난이도
                   </div>
-                  <div style={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#e74c3c'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      color: "#e74c3c",
+                    }}
+                  >
                     최상
                   </div>
                 </div>
               </div>
 
-              <div style={{
-                backgroundColor: '#e0f7fa',
-                borderRadius: '12px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <div style={{
-                  fontSize: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
+              <div
+                style={{
+                  backgroundColor: "#e0f7fa",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   💡
                 </div>
                 <div>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#999',
-                    marginBottom: '4px'
-                  }}>
-                    틀은 개념
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#999",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    틀린 개념
                   </div>
-                  <div style={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#20c997'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      color: "#20c997",
+                    }}
+                  >
                     {selectedProblem.concept}
                   </div>
                 </div>
               </div>
 
-              <div style={{
-                backgroundColor: '#e3f2fd',
-                borderRadius: '12px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <div style={{
-                  fontSize: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
+              <div
+                style={{
+                  backgroundColor: "#e3f2fd",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   😊
                 </div>
                 <div>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#999',
-                    marginBottom: '4px'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#999",
+                      marginBottom: "4px",
+                    }}
+                  >
                     오답 인원
                   </div>
-                  <div style={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#2196f3'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      color: "#2196f3",
+                    }}
+                  >
                     28/29
                   </div>
                 </div>
               </div>
 
-              <div style={{
-                backgroundColor: '#f3e5f5',
-                borderRadius: '12px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <div style={{
-                  fontSize: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
+              <div
+                style={{
+                  backgroundColor: "#f3e5f5",
+                  borderRadius: "12px",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   ⏰
                 </div>
                 <div>
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#999',
-                    marginBottom: '4px'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#999",
+                      marginBottom: "4px",
+                    }}
+                  >
                     평균 시간
                   </div>
-                  <div style={{
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    color: '#9c27b0'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      color: "#9c27b0",
+                    }}
+                  >
                     {selectedProblem.averageTime}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div style={{
-              backgroundColor: '#f0f8ff',
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '16px'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginBottom: '12px'
-              }}>
-                <div style={{ fontSize: '20px' }}>📋</div>
-                <h3 style={{
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  color: '#2c3e50',
-                  margin: 0
-                }}>
+            <div
+              style={{
+                backgroundColor: "#f0f8ff",
+                borderRadius: "12px",
+                padding: "16px",
+                marginBottom: "16px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  marginBottom: "12px",
+                }}
+              >
+                <div style={{ fontSize: "20px" }}>📋</div>
+                <h3
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    color: "#2c3e50",
+                    margin: 0,
+                  }}
+                >
                   문제 내용
                 </h3>
               </div>
-              <p style={{
-                fontSize: '14px',
-                color: '#555',
-                lineHeight: '1.6',
-                margin: 0
-              }}>
-                수직선 위에서 집 P의 위치 x가 다음 조건을 만족하는 미분방정식을 구하는 문제입니다. 변위와 속도의 관계를 이용하여 미분계수의 활용을 묻고 있습니다.
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#555",
+                  lineHeight: "1.6",
+                  margin: 0,
+                }}
+              >
+                수직선 위에서 집 P의 위치 x가 다음 조건을 만족하는 미분방정식을
+                구하는 문제입니다. 변위와 속도의 관계를 이용하여 미분계수의
+                활용을 묻고 있습니다.
               </p>
             </div>
 
-            <div style={{
-              backgroundColor: '#fff0f0',
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '24px'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                marginBottom: '12px'
-              }}>
-                <div style={{ fontSize: '20px' }}>🎯</div>
-                <h3 style={{
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  color: '#2c3e50',
-                  margin: 0
-                }}>
+            <div
+              style={{
+                backgroundColor: "#fff0f0",
+                borderRadius: "12px",
+                padding: "16px",
+                marginBottom: "24px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  marginBottom: "12px",
+                }}
+              >
+                <div style={{ fontSize: "20px" }}>🎯</div>
+                <h3
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    color: "#2c3e50",
+                    margin: 0,
+                  }}
+                >
                   주요 오답 원인
                 </h3>
               </div>
-              <ul style={{
-                fontSize: '14px',
-                color: '#555',
-                lineHeight: '1.8',
-                margin: 0,
-                paddingLeft: '20px'
-              }}>
+              <ul
+                style={{
+                  fontSize: "14px",
+                  color: "#555",
+                  lineHeight: "1.8",
+                  margin: 0,
+                  paddingLeft: "20px",
+                }}
+              >
                 <li>미분계수의 물리적 의미 이해 부족</li>
                 <li>변수 분리 과정에서의 계산 실수</li>
                 <li>초기 조건 적용 오류</li>
@@ -1462,15 +1776,15 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
             <button
               onClick={() => setSelectedProblem(null)}
               style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: '#20c997',
-                border: 'none',
-                borderRadius: '8px',
-                color: 'white',
-                fontSize: '15px',
-                fontWeight: '600',
-                cursor: 'pointer'
+                width: "100%",
+                padding: "12px",
+                backgroundColor: "#20c997",
+                border: "none",
+                borderRadius: "8px",
+                color: "white",
+                fontSize: "15px",
+                fontWeight: "600",
+                cursor: "pointer",
               }}
             >
               확인
