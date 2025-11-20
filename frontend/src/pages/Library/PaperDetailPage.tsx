@@ -212,182 +212,180 @@ function PaperDetailPage({ paperId, subject, title, description, onBack }: Paper
         minHeight: "100%",
       }}
     >
-      <div
+      <button
+        onClick={onBack}
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "24px",
+          padding: "8px 12px",
+          backgroundColor: "transparent",
+          border: "1px solid #ddd",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "14px",
+          color: "#666",
+          marginBottom: "16px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <button
-            onClick={onBack}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: "transparent",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "14px",
-              color: "#666",
-            }}
-          >
-            ← 뒤로
-          </button>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        ← 뒤로
+      </button>
+
+      <div
+        style={{
+          backgroundColor: "white",
+          borderRadius: "12px",
+          padding: "32px",
+          marginBottom: "24px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            marginBottom: "24px",
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
               <span style={{ fontSize: "16px" }}>⭐</span>
               <h1 style={{ fontSize: "24px", fontWeight: "600", margin: 0 }}>
                 {title}
               </h1>
             </div>
-            <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666" }}>
+            <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#666" }}>
               {description}
             </p>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <span
+                style={{
+                  backgroundColor: "#e8f5e9",
+                  color: "#2e7d32",
+                  padding: "6px 16px",
+                  borderRadius: "4px",
+                  fontSize: "13px",
+                  fontWeight: "500",
+                }}
+              >
+                {subject}
+              </span>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "white",
+                border: "1px solid #20c997",
+                borderRadius: "6px",
+                color: "#20c997",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+              }}
+            >
+              상세 리포트
+            </button>
+            <button
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#20c997",
+                border: "none",
+                borderRadius: "6px",
+                color: "white",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+              }}
+            >
+              결과 공유
+            </button>
+            <button
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "white",
+                border: "1px solid #ddd",
+                borderRadius: "6px",
+                color: "#666",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+              }}
+            >
+              재출제
+            </button>
           </div>
         </div>
-        <div style={{ display: "flex", gap: "8px" }}>
-          <button
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "white",
-              border: "1px solid #20c997",
-              borderRadius: "6px",
-              color: "#20c997",
-              fontSize: "14px",
-              fontWeight: "500",
-              cursor: "pointer",
-            }}
-          >
-            상세 리포트
-          </button>
-          <button
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#20c997",
-              border: "none",
-              borderRadius: "6px",
-              color: "white",
-              fontSize: "14px",
-              fontWeight: "500",
-              cursor: "pointer",
-            }}
-          >
-            결과 공유
-          </button>
-          <button
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "white",
-              border: "1px solid #ddd",
-              borderRadius: "6px",
-              color: "#666",
-              fontSize: "14px",
-              fontWeight: "500",
-              cursor: "pointer",
-            }}
-          >
-            재출제
-          </button>
-        </div>
-      </div>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "12px",
-          marginBottom: "24px",
-        }}
-      >
-        <span
-          style={{
-            backgroundColor: "#e8f5e9",
-            color: "#2e7d32",
-            padding: "6px 16px",
-            borderRadius: "4px",
-            fontSize: "13px",
-            fontWeight: "500",
-          }}
-        >
-          수학
-        </span>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "16px",
-          marginBottom: "24px",
-        }}
-      >
         <div
           style={{
-            backgroundColor: "white",
-            borderRadius: "8px",
-            padding: "16px",
-            border: "1px solid #e0e0e0",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "16px",
           }}
         >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            출제일시
+          <div
+            style={{
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "16px",
+            }}
+          >
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+              출제일시
+            </div>
+            <div
+              style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            >
+              2024년 10월 17일
+            </div>
           </div>
           <div
-            style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            style={{
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "16px",
+            }}
           >
-            2024년 10월 17일
-          </div>
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            borderRadius: "8px",
-            padding: "16px",
-            border: "1px solid #e0e0e0",
-          }}
-        >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            문제 수
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+              문제 수
+            </div>
+            <div
+              style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            >
+              45개
+            </div>
           </div>
           <div
-            style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            style={{
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "16px",
+            }}
           >
-            45개
-          </div>
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            borderRadius: "8px",
-            padding: "16px",
-            border: "1px solid #e0e0e0",
-          }}
-        >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            정답률
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+              정답률
+            </div>
+            <div
+              style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            >
+              87%
+            </div>
           </div>
           <div
-            style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            style={{
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "16px",
+            }}
           >
-            87%
-          </div>
-        </div>
-        <div
-          style={{
-            backgroundColor: "white",
-            borderRadius: "8px",
-            padding: "16px",
-            border: "1px solid #e0e0e0",
-          }}
-        >
-          <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
-            평균 소요시간
-          </div>
-          <div
-            style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
-          >
-            1회 3.5초
+            <div style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}>
+              평균 소요시간
+            </div>
+            <div
+              style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
+            >
+              1회 3.5초
+            </div>
           </div>
         </div>
       </div>
