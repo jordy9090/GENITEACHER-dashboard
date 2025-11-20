@@ -63,7 +63,7 @@ function PaperDetailPage({
       id: "1",
       name: "김현성",
       className: "3학년 7반",
-      time: "88번 34초",
+      time: "88분 34초",
       correctRate: "87%",
       hintUsage: "66%",
       metacognition: "90%",
@@ -74,7 +74,7 @@ function PaperDetailPage({
       id: "2",
       name: "강민성",
       className: "3학년 7반",
-      time: "88번 34초",
+      time: "88분 34초",
       correctRate: "87%",
       hintUsage: "66%",
       metacognition: "90%",
@@ -85,7 +85,7 @@ function PaperDetailPage({
       id: "3",
       name: "김현성",
       className: "3학년 7반",
-      time: "88번 34초",
+      time: "88분 34초",
       correctRate: "87%",
       hintUsage: "66%",
       metacognition: "90%",
@@ -96,7 +96,7 @@ function PaperDetailPage({
       id: "4",
       name: "강민성",
       className: "3학년 7반",
-      time: "88번 34초",
+      time: "88분 34초",
       correctRate: "87%",
       hintUsage: "66%",
       metacognition: "90%",
@@ -107,7 +107,7 @@ function PaperDetailPage({
       id: "5",
       name: "김현성",
       className: "3학년 7반",
-      time: "88번 34초",
+      time: "88분 34초",
       correctRate: "87%",
       hintUsage: "66%",
       metacognition: "90%",
@@ -246,7 +246,7 @@ function PaperDetailPage({
           borderRadius: "12px",
           padding: "32px",
           marginBottom: "24px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          boxShadow: "none",
         }}
       >
         <div
@@ -261,30 +261,32 @@ function PaperDetailPage({
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                marginBottom: "8px",
+                alignItems: "center", // 수평 중앙 맞춤
+                gap: "16px", // title과 description 사이 간격
+                marginBottom: "16px",
               }}
             >
-              <span style={{ fontSize: "16px" }}>⭐</span>
-              <h1 style={{ fontSize: "24px", fontWeight: "600", margin: 0 }}>
-                {title}
-              </h1>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <span style={{ fontSize: "20px" }}>⭐</span>
+                <h1 style={{ fontSize: "20px", fontWeight: "700", margin: 0 }}>
+                  {title}
+                </h1>
+              </div>
+              <p style={{ margin: 0, fontSize: "14px", color: "#666" }}>
+                {description}
+              </p>
             </div>
-            <p
-              style={{ margin: "0 0 16px 0", fontSize: "14px", color: "#666" }}
-            >
-              {description}
-            </p>
             <div style={{ display: "flex", gap: "8px" }}>
               <span
                 style={{
-                  backgroundColor: "#e8f5e9",
-                  color: "#2e7d32",
+                  backgroundColor: "#ECFEFF",
+                  color: "#0891B2",
                   padding: "6px 16px",
-                  borderRadius: "4px",
-                  fontSize: "13px",
-                  fontWeight: "500",
+                  borderRadius: "130px",
+                  fontSize: "12px",
+                  fontWeight: "600",
                 }}
               >
                 {subject}
@@ -295,10 +297,10 @@ function PaperDetailPage({
             <button
               style={{
                 padding: "10px 20px",
-                backgroundColor: "white",
-                border: "1px solid #20c997",
+                backgroundColor: "#14B8A6",
+                border: "1px solid #14B8A6",
                 borderRadius: "6px",
-                color: "#20c997",
+                color: "#FAFAFA",
                 fontSize: "14px",
                 fontWeight: "500",
                 cursor: "pointer",
@@ -309,10 +311,10 @@ function PaperDetailPage({
             <button
               style={{
                 padding: "10px 20px",
-                backgroundColor: "#20c997",
-                border: "none",
+                backgroundColor: "transparent",
+                border: "1px solid #14B8A6",
                 borderRadius: "6px",
-                color: "white",
+                color: "#14B8A6",
                 fontSize: "14px",
                 fontWeight: "500",
                 cursor: "pointer",
@@ -323,10 +325,10 @@ function PaperDetailPage({
             <button
               style={{
                 padding: "10px 20px",
-                backgroundColor: "white",
-                border: "1px solid #ddd",
+                backgroundColor: "transparent",
+                border: "1px solid #14B8A6",
                 borderRadius: "6px",
-                color: "#666",
+                color: "#14B8A6",
                 fontSize: "14px",
                 fontWeight: "500",
                 cursor: "pointer",
@@ -339,16 +341,20 @@ function PaperDetailPage({
 
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            display: "flex",
             gap: "16px",
+            justifyContent: "flex-start",
+            maxWidth: "600px", // 섹션 너비 제한
           }}
         >
+          {/* 출제일시 */}
           <div
             style={{
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#F0FDFA",
               borderRadius: "8px",
               padding: "16px",
+              flex: 1,
+              minWidth: 0,
             }}
           >
             <div
@@ -362,11 +368,15 @@ function PaperDetailPage({
               2024년 10월 17일
             </div>
           </div>
+
+          {/* 문제 수 */}
           <div
             style={{
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#FFF1F2",
               borderRadius: "8px",
               padding: "16px",
+              flex: 1,
+              minWidth: 0,
             }}
           >
             <div
@@ -380,29 +390,37 @@ function PaperDetailPage({
               45개
             </div>
           </div>
+
+          {/* 참여학생 */}
           <div
             style={{
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#ECFEFF",
               borderRadius: "8px",
               padding: "16px",
+              flex: 1,
+              minWidth: 0,
             }}
           >
             <div
               style={{ fontSize: "12px", color: "#999", marginBottom: "8px" }}
             >
-              정답률
+              참여학생
             </div>
             <div
               style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
             >
-              87%
+              29명
             </div>
           </div>
+
+          {/* 평균 소요시간 */}
           <div
             style={{
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#FAF5FF",
               borderRadius: "8px",
               padding: "16px",
+              flex: 1,
+              minWidth: 0,
             }}
           >
             <div
@@ -413,7 +431,7 @@ function PaperDetailPage({
             <div
               style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
             >
-              1회 3.5초
+              3.5초
             </div>
           </div>
         </div>
@@ -427,22 +445,23 @@ function PaperDetailPage({
           marginBottom: "24px",
         }}
       >
+        {/* 카드 1 */}
         <div
           style={{
             backgroundColor: "white",
             borderRadius: "12px",
             padding: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            boxShadow: "none",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "12px",
+              gap: "16px",
             }}
           >
+            {/* 아이콘 왼쪽 */}
             <div
               style={{
                 width: "40px",
@@ -457,42 +476,41 @@ function PaperDetailPage({
             >
               😊
             </div>
-            <div style={{ fontSize: "12px", color: "#999" }}>•••</div>
-          </div>
-          <div style={{ fontSize: "13px", color: "#999", marginBottom: "4px" }}>
-            참여 학생
-          </div>
-          <div
-            style={{ fontSize: "32px", fontWeight: "600", color: "#2196f3" }}
-          >
-            4
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: "400",
-                color: "#999",
-                marginLeft: "4px",
-              }}
-            >
-              명
-            </span>
+
+            {/* 텍스트 오른쪽 정렬 */}
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, textAlign: "right" }}>
+              <span style={{ fontSize: "13px", color: "#999" }}>참여 학생</span>
+              <span style={{ fontSize: "32px", fontWeight: "600", color: "#2196f3" }}>
+                4
+                <span
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "400",
+                    color: "#999",
+                    marginLeft: "4px",
+                  }}
+                >
+                  명
+                </span>
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* 카드 2 */}
         <div
           style={{
             backgroundColor: "white",
             borderRadius: "12px",
             padding: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            boxShadow: "none",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "12px",
+              gap: "16px",
             }}
           >
             <div
@@ -509,42 +527,39 @@ function PaperDetailPage({
             >
               📈
             </div>
-            <div style={{ fontSize: "12px", color: "#999" }}>•••</div>
-          </div>
-          <div style={{ fontSize: "13px", color: "#999", marginBottom: "4px" }}>
-            평균 정답률
-          </div>
-          <div
-            style={{ fontSize: "32px", fontWeight: "600", color: "#4caf50" }}
-          >
-            87
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: "400",
-                color: "#999",
-                marginLeft: "4px",
-              }}
-            >
-              %
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, textAlign: "right" }}>
+              <span style={{ fontSize: "13px", color: "#999" }}>평균 정답률</span>
+              <span style={{ fontSize: "32px", fontWeight: "600", color: "#4caf50" }}>
+                87
+                <span
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "400",
+                    color: "#999",
+                    marginLeft: "4px",
+                  }}
+                >
+                  %
+                </span>
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* 카드 3 */}
         <div
           style={{
             backgroundColor: "white",
             borderRadius: "12px",
             padding: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            boxShadow: "none",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "12px",
+              gap: "16px",
             }}
           >
             <div
@@ -561,42 +576,39 @@ function PaperDetailPage({
             >
               💡
             </div>
-            <div style={{ fontSize: "12px", color: "#999" }}>•••</div>
-          </div>
-          <div style={{ fontSize: "13px", color: "#999", marginBottom: "4px" }}>
-            힌트 사용률
-          </div>
-          <div
-            style={{ fontSize: "32px", fontWeight: "600", color: "#e91e63" }}
-          >
-            66
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: "400",
-                color: "#999",
-                marginLeft: "4px",
-              }}
-            >
-              %
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, textAlign: "right" }}>
+              <span style={{ fontSize: "13px", color: "#999" }}>힌트 사용률</span>
+              <span style={{ fontSize: "32px", fontWeight: "600", color: "#e91e63" }}>
+                66
+                <span
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "400",
+                    color: "#999",
+                    marginLeft: "4px",
+                  }}
+                >
+                  %
+                </span>
+              </span>
+            </div>
           </div>
         </div>
 
+        {/* 카드 4 */}
         <div
           style={{
             backgroundColor: "white",
             borderRadius: "12px",
             padding: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            boxShadow: "none",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "12px",
+              gap: "16px",
             }}
           >
             <div
@@ -613,35 +625,33 @@ function PaperDetailPage({
             >
               ⏰
             </div>
-            <div style={{ fontSize: "12px", color: "#999" }}>•••</div>
-          </div>
-          <div style={{ fontSize: "13px", color: "#999", marginBottom: "4px" }}>
-            메타인지
-          </div>
-          <div
-            style={{ fontSize: "32px", fontWeight: "600", color: "#9c27b0" }}
-          >
-            90
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: "400",
-                color: "#999",
-                marginLeft: "4px",
-              }}
-            >
-              %
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, textAlign: "right" }}>
+              <span style={{ fontSize: "13px", color: "#999" }}>메타인지</span>
+              <span style={{ fontSize: "32px", fontWeight: "600", color: "#9c27b0" }}>
+                90
+                <span
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "400",
+                    color: "#999",
+                    marginLeft: "4px",
+                  }}
+                >
+                  %
+                </span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
+
 
       <div
         style={{
           backgroundColor: "white",
           borderRadius: "12px",
           padding: "24px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+          boxShadow: "none",
         }}
       >
         <div
@@ -865,21 +875,26 @@ function PaperDetailPage({
                             width: "24px",
                             height: "24px",
                             borderRadius: "50%",
-                            backgroundColor: student.wrongNoteCompleted ? "#20c997" : "#e0e0e0",
+                            backgroundColor: student.wrongNoteCompleted
+                              ? "#20c997"
+                              : "#e0e0e0",
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
                           }}
                         >
                           {student.wrongNoteCompleted && (
-                            <span style={{ color: "white", fontSize: "12px" }}>✓</span>
+                            <span style={{ color: "white", fontSize: "12px" }}>
+                              ✓
+                            </span>
                           )}
                         </div>
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
                         <span
                           style={{
-                            color: student.status === "완료" ? "#20c997" : "#e74c3c",
+                            color:
+                              student.status === "완료" ? "#20c997" : "#e74c3c",
                             fontSize: "14px",
                             fontWeight: "500",
                           }}
