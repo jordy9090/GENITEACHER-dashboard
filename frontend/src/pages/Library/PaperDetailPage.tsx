@@ -1485,14 +1485,14 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
 
             <div style={{ 
               position: 'relative',
-              padding: '20px 40px',
+              padding: '20px 40px 60px',
               minHeight: '350px'
             }}>
               <div style={{
                 position: 'absolute',
                 left: 0,
                 top: 20,
-                bottom: 40,
+                bottom: 60,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -1512,7 +1512,7 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
                 left: 40,
                 right: 40,
                 top: 20,
-                bottom: 40,
+                bottom: 60,
                 borderLeft: '1px solid #e0e0e0',
                 borderBottom: '1px solid #e0e0e0'
               }}>
@@ -1533,8 +1533,7 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
                       flex: 1,
                       display: 'flex',
                       flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '12px'
+                      alignItems: 'center'
                     }}>
                       <div style={{
                         width: '100%',
@@ -1544,16 +1543,33 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
                         borderRadius: '4px 4px 0 0',
                         transition: 'all 0.3s ease'
                       }} />
-                      <div style={{
-                        fontSize: '14px',
-                        color: '#333',
-                        fontWeight: '500'
-                      }}>
-                        {item.problemNumber}
-                      </div>
                     </div>
                   ))}
                 </div>
+              </div>
+
+              <div style={{
+                position: 'absolute',
+                left: 40,
+                right: 40,
+                bottom: 20,
+                display: 'flex',
+                justifyContent: 'space-around',
+                gap: '40px',
+                padding: '0 60px'
+              }}>
+                {insightData.map((item, index) => (
+                  <div key={index} style={{
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    color: '#333',
+                    fontWeight: '500'
+                  }}>
+                    {item.problemNumber}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
