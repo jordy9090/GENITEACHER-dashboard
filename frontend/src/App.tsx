@@ -11,13 +11,20 @@ import PaperDetailPage from './pages/Library/PaperDetailPage';
 
 type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'schedule' | 'library' | 'paperDetail';
 
+interface PaperInfo {
+  id: string;
+  subject: string;
+  title: string;
+  description: string;
+}
+
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('dashboard');
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [selectedClassName, setSelectedClassName] = useState<string | null>(null);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState<string | null>(null);
-  const [selectedPaperId, setSelectedPaperId] = useState<string | null>(null);
+  const [selectedPaperInfo, setSelectedPaperInfo] = useState<PaperInfo | null>(null);
 
   const handleNavigateToClass = (classId: string, className: string) => {
     setSelectedClassId(classId);
@@ -57,14 +64,14 @@ function App() {
     setSelectedStudentName(null);
   };
 
-  const handleNavigateToPaper = (paperId: string) => {
-    setSelectedPaperId(paperId);
+  const handleNavigateToPaper = (paperInfo: PaperInfo) => {
+    setSelectedPaperInfo(paperInfo);
     setCurrentPage('paperDetail');
   };
 
   const handleBackToLibrary = () => {
     setCurrentPage('library');
-    setSelectedPaperId(null);
+    setSelectedPaperInfo(null);
   };
 
   const renderPage = () => {
@@ -123,9 +130,12 @@ function App() {
       case 'library':
         return <LibraryListPage onNavigateToPaper={handleNavigateToPaper} />;
       case 'paperDetail':
-        return selectedPaperId ? (
+        return selectedPaperInfo ? (
           <PaperDetailPage 
-            paperId={selectedPaperId}
+            paperId={selectedPaperInfo.id}
+            subject={selectedPaperInfo.subject}
+            title={selectedPaperInfo.title}
+            description={selectedPaperInfo.description}
             onBack={handleBackToLibrary} 
           />
         ) : (

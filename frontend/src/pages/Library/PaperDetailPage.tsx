@@ -2,6 +2,9 @@ import { useState } from "react";
 
 interface PaperDetailPageProps {
   paperId: string;
+  subject: string;
+  title: string;
+  description: string;
   onBack: () => void;
 }
 
@@ -39,7 +42,7 @@ interface StudentSolutionData {
   learningPoints: string[];
 }
 
-function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
+function PaperDetailPage({ paperId, subject, title, description, onBack }: PaperDetailPageProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [sortOrder, setSortOrder] = useState<"print" | "incorrect">("print");
   const [selectedProblem, setSelectedProblem] =
@@ -236,11 +239,11 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ fontSize: "16px" }}>⭐</span>
               <h1 style={{ fontSize: "24px", fontWeight: "600", margin: 0 }}>
-                수학 영역(나 형)
+                {title}
               </h1>
             </div>
             <p style={{ margin: "4px 0 0 0", fontSize: "13px", color: "#666" }}>
-              2018년 9월 3일 모의고사 문제지
+              {description}
             </p>
           </div>
         </div>
