@@ -191,6 +191,13 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
     }
   ];
 
+  const insightData = [
+    { problemNumber: "21번", incorrectRate: 70, color: "#20c997" },
+    { problemNumber: "28번", incorrectRate: 85, color: "#e74c3c" },
+    { problemNumber: "29번", incorrectRate: 60, color: "#20c997" },
+    { problemNumber: "30번", incorrectRate: 60, color: "#20c997" },
+  ];
+
   return (
     <div
       style={{
@@ -1466,8 +1473,89 @@ function PaperDetailPage({ paperId, onBack }: PaperDetailPageProps) {
         )}
 
         {activeTab === 3 && (
-          <div style={{ padding: "40px", textAlign: "center", color: "#999" }}>
-            인사이트 내용이 여기에 표시됩니다.
+          <div style={{ padding: '0' }}>
+            <h2 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: '#20c997',
+              marginBottom: '40px'
+            }}>
+              문제별 오답률 분석
+            </h2>
+
+            <div style={{ 
+              position: 'relative',
+              padding: '20px 40px',
+              minHeight: '350px'
+            }}>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: 20,
+                bottom: 40,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                fontSize: '12px',
+                color: '#999'
+              }}>
+                <div>100%</div>
+                <div>80%</div>
+                <div>60%</div>
+                <div>40%</div>
+                <div>20%</div>
+                <div>0%</div>
+              </div>
+
+              <div style={{
+                position: 'absolute',
+                left: 40,
+                right: 40,
+                top: 20,
+                bottom: 40,
+                borderLeft: '1px solid #e0e0e0',
+                borderBottom: '1px solid #e0e0e0'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'space-around',
+                  gap: '40px',
+                  padding: '0 60px'
+                }}>
+                  {insightData.map((item, index) => (
+                    <div key={index} style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '12px'
+                    }}>
+                      <div style={{
+                        width: '100%',
+                        maxWidth: '120px',
+                        height: `${item.incorrectRate * 3}px`,
+                        backgroundColor: item.color,
+                        borderRadius: '4px 4px 0 0',
+                        transition: 'all 0.3s ease'
+                      }} />
+                      <div style={{
+                        fontSize: '14px',
+                        color: '#333',
+                        fontWeight: '500'
+                      }}>
+                        {item.problemNumber}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
