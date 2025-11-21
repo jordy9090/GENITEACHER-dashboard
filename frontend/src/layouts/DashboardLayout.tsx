@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import Sidebar from '../components/sidebar/Sidebar';
 import Topbar from '../components/header/Topbar';
 
-type PageType = 'dashboard' | 'class' | 'schedule' | 'library';
+type PageType = 'dashboard' | 'problem' | 'class' | 'schedule' | 'library';
 
 interface DashboardLayoutProps {
   children: ReactNode;

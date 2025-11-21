@@ -6,11 +6,12 @@ import ClassDetailPage from './pages/Class/ClassDetailPage';
 import StudentListPage from './pages/Class/StudentListPage';
 import StudentDetailPage from './pages/Class/StudentDetailPage';
 import AchievementAnalysisPage from './pages/Class/AchievementAnalysisPage';
+import QuestionCreatePage from './pages/Library/QuestionCreatePage';
 import SchedulePage from './pages/Schedule/SchedulePage';
 import LibraryListPage from './pages/Library/LibraryListPage';
 import PaperDetailPage from './pages/Library/PaperDetailPage';
 
-type PageType = 'dashboard' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'achievementAnalysis' | 'schedule' | 'library' | 'paperDetail';
+type PageType = 'dashboard' | 'problem' | 'class' | 'classDetail' | 'studentList' | 'studentDetail' | 'achievementAnalysis' | 'schedule' | 'library' | 'paperDetail';
 
 interface PaperInfo {
   id: string;
@@ -138,6 +139,8 @@ function App() {
         ) : (
           <ClassListPage />
         );
+      case 'problem':
+        return <QuestionCreatePage />;
       case 'schedule':
         return <SchedulePage />;
       case 'library':

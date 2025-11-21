@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type PageType = 'dashboard' | 'class' | 'schedule' | 'library';
+type PageType = 'dashboard' | 'problem' | 'class' | 'schedule' | 'library';
 
 interface TopbarProps {
   currentPage: PageType;
