@@ -8,18 +8,17 @@ interface StudentClassCardProps {
   homeworkRate: number;
 }
 
-function StudentClassCard({ name, grade, totalStudents, submissions, homeworkRate }: StudentClassCardProps) {
+function StudentClassCard({ name, totalStudents, submissions, homeworkRate }: StudentClassCardProps) {
   return (
     <div style={{
       backgroundColor: 'white',
-      borderRadius: '12px',
-      padding: '20px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      borderRadius: '8px',
+      padding: '0',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '16px'
+      overflow: 'hidden',
+      border: '1px solid #e0e0e0'
     }}
     onMouseEnter={(e) => {
       e.currentTarget.style.transform = 'translateY(-2px)';
@@ -27,61 +26,102 @@ function StudentClassCard({ name, grade, totalStudents, submissions, homeworkRat
     }}
     onMouseLeave={(e) => {
       e.currentTarget.style.transform = 'translateY(0)';
-      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.12)';
     }}
     >
-      <div>
-        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', marginBottom: '4px' }}>
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        padding: '16px 20px',
+        borderBottom: '1px solid #e0e0e0'
+      }}>
+        <h3 style={{ 
+          margin: 0, 
+          fontSize: '16px', 
+          fontWeight: '600',
+          color: '#333'
+        }}>
           {name}
         </h3>
-        <span style={{
-          fontSize: '12px',
-          color: '#999',
-          backgroundColor: '#f5f5f5',
-          padding: '2px 8px',
-          borderRadius: '4px'
-        }}>
-          {grade}
-        </span>
       </div>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '13px', color: '#666' }}>전체 학생</span>
-          <span style={{ fontSize: '15px', fontWeight: '600', color: '#3498db' }}>
+      <div style={{ 
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>👥</span>
+          <span style={{ fontSize: '13px', color: '#666' }}>전체 학생 수:</span>
+          <span style={{ fontSize: '14px', fontWeight: '600', color: '#333', marginLeft: 'auto' }}>
             {totalStudents}명
           </span>
         </div>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '13px', color: '#666' }}>제출 학생</span>
-          <span style={{ fontSize: '15px', fontWeight: '600', color: '#2ecc71' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>⚠️</span>
+          <span style={{ fontSize: '13px', color: '#666' }}>작품 제출한:</span>
+          <span style={{ fontSize: '14px', fontWeight: '600', color: '#e74c3c', marginLeft: 'auto' }}>
             {submissions}명
           </span>
         </div>
         
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-            <span style={{ fontSize: '13px', color: '#666' }}>숙제 완료율</span>
-            <span style={{ fontSize: '15px', fontWeight: '600', color: '#9b59b6' }}>
-              {homeworkRate}%
-            </span>
-          </div>
-          <div style={{
-            width: '100%',
-            height: '6px',
-            backgroundColor: '#ecf0f1',
-            borderRadius: '3px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${homeworkRate}%`,
-              height: '100%',
-              backgroundColor: '#9b59b6',
-              transition: 'width 0.3s ease'
-            }} />
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '18px' }}>✅</span>
+          <span style={{ fontSize: '13px', color: '#666' }}>학습 성취도:</span>
+          <span style={{ fontSize: '14px', fontWeight: '600', color: '#3498db', marginLeft: 'auto' }}>
+            {homeworkRate}%
+          </span>
         </div>
+      </div>
+
+      <div style={{
+        padding: '12px 20px',
+        borderTop: '1px solid #f0f0f0',
+        display: 'flex',
+        gap: '8px',
+        justifyContent: 'space-between'
+      }}>
+        <button style={{
+          flex: 1,
+          padding: '8px 12px',
+          backgroundColor: '#f8f9fa',
+          border: '1px solid #ddd',
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#666',
+          cursor: 'pointer',
+          transition: 'all 0.2s'
+        }}>
+          공석
+        </button>
+        <button style={{
+          flex: 1,
+          padding: '8px 12px',
+          backgroundColor: '#f8f9fa',
+          border: '1px solid #ddd',
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#666',
+          cursor: 'pointer',
+          transition: 'all 0.2s'
+        }}>
+          과제
+        </button>
+        <button style={{
+          flex: 1,
+          padding: '8px 12px',
+          backgroundColor: '#20c997',
+          border: 'none',
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: 'white',
+          fontWeight: '500',
+          cursor: 'pointer',
+          transition: 'all 0.2s'
+        }}>
+          클래스 등록하기
+        </button>
       </div>
     </div>
   );

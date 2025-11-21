@@ -12,5 +12,10 @@
   "dependencies": {
     "@types/node": "^22.13.11",
     "react-router-dom": "^7.9.6"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwinds": "^0.0.0"
   }
 }
