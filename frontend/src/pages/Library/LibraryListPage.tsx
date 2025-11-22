@@ -34,17 +34,17 @@ function LibraryListPage({ onNavigateToPaper }: LibraryListPageProps) {
   };
 
   const papers: Paper[] = Array.from({ length: 7 }, (_, i) => {
-    const subject = i % 2 === 0 ? "수학" : "과학"; // 여기만 바꿈
+    const subject = i % 2 === 0 ? "수학" : "과학";
     return {
       id: `${i + 1}`,
       imageUrl: "/paper-math.png",
       subject,
       title: `${subject} 영역(나 형) ${i + 1}`,
-      description: "2018년 9월 3일 모의고사 문제지",
+      description: "2018년 9월 3일 모의고사 문제지 (30문제)",
       stats: {
-        submission: `${Math.floor(Math.random() * 100)}%`, // 노출률
-        correct: `${Math.floor(Math.random() * 100)}%`, // 정답률
-        difficulty: (Math.random() * 5).toFixed(1), // 학생 피드백 0~5점
+        submission: `${Math.floor(Math.random() * 100)}%`,
+        correct: `${Math.floor(Math.random() * 100)}%`,
+        difficulty: (Math.random() * 5).toFixed(1),
       },
     };
   });

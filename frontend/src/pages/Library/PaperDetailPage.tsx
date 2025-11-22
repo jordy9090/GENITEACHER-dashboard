@@ -55,7 +55,7 @@ function PaperDetailPage({
   const [selectedProblem, setSelectedProblem] =
     useState<ProblemAnalysis | null>(null);
   const [selectedProblemForAnalysis, setSelectedProblemForAnalysis] =
-    useState("21번");
+    useState("1번");
   const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "인사이트"];
 
   const studentData: StudentPerformance[] = [
@@ -116,53 +116,31 @@ function PaperDetailPage({
     },
   ];
 
-  const problemData: ProblemAnalysis[] = [
-    {
-      id: "1",
-      problemNumber: "21번",
-      difficulty: "상",
-      difficultyColor: "#e74c3c",
-      incorrectRate: "4/4",
-      averageTime: "12분 3초",
-      concept: "정적분의 활용",
-    },
-    {
-      id: "2",
-      problemNumber: "21번",
-      difficulty: "중",
-      difficultyColor: "#20c997",
-      incorrectRate: "4/4",
-      averageTime: "12분 3초",
-      concept: "정적분의 활용",
-    },
-    {
-      id: "3",
-      problemNumber: "21번",
-      difficulty: "하",
-      difficultyColor: "#9b59b6",
-      incorrectRate: "4/4",
-      averageTime: "12분 3초",
-      concept: "정적분의 활용",
-    },
-    {
-      id: "4",
-      problemNumber: "21번",
-      difficulty: "상",
-      difficultyColor: "#20c997",
-      incorrectRate: "4/4",
-      averageTime: "12분 3초",
-      concept: "정적분의 활용",
-    },
-    {
-      id: "5",
-      problemNumber: "21번",
-      difficulty: "상",
-      difficultyColor: "#20c997",
-      incorrectRate: "4/4",
-      averageTime: "12분 3초",
-      concept: "정적분의 활용",
-    },
-  ];
+  const problemData: ProblemAnalysis[] = Array.from({ length: 30 }, (_, i) => {
+    const difficulties: Array<"상" | "중" | "하"> = ["상", "중", "하"];
+    const colors = ["#e74c3c", "#f39c12", "#20c997"];
+    const concepts = [
+      "정적분의 활용",
+      "미분계수의 정의",
+      "도함수의 활용",
+      "삼각함수의 극한",
+      "지수함수와 로그함수",
+      "수열의 극한",
+      "함수의 극한",
+      "연속함수",
+    ];
+    const diffIndex = i % 3;
+    
+    return {
+      id: String(i + 1),
+      problemNumber: `${i + 1}번`,
+      difficulty: difficulties[diffIndex],
+      difficultyColor: colors[diffIndex],
+      incorrectRate: `${Math.floor(Math.random() * 10)}/${Math.floor(Math.random() * 10) + 10}`,
+      averageTime: `${Math.floor(Math.random() * 15) + 5}분 ${Math.floor(Math.random() * 60)}초`,
+      concept: concepts[i % concepts.length],
+    };
+  });
 
   const studentSolutions: StudentSolutionData[] = [
     {
@@ -1328,9 +1306,9 @@ function PaperDetailPage({
                   minWidth: "150px",
                 }}
               >
-                <option value="21번">21번</option>
-                <option value="22번">22번</option>
-                <option value="23번">23번</option>
+                {Array.from({ length: 30 }, (_, i) => (
+                  <option key={i + 1} value={`${i + 1}번`}>{i + 1}번</option>
+                ))}
               </select>
             </div>
 
