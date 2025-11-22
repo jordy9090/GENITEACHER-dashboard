@@ -85,7 +85,17 @@ function App() {
       case 'dashboard':
         return <DashboardPage />;
       case 'class':
-        return <ClassListPage />;
+        return (
+          <ClassListPage 
+            onNavigateToClassDetail={(classId, className) => {
+              setSelectedClassId(classId);
+              setSelectedClassName(className);
+              setCurrentPage('classDetail');
+            }}
+            onNavigateToStudentList={handleNavigateToStudentList}
+            onNavigateToAchievementAnalysis={handleNavigateToAchievementAnalysis}
+          />
+        );
       case 'classDetail':
         return selectedClassId && selectedClassName ? (
           <ClassDetailPage 

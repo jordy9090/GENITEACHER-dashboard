@@ -1,6 +1,16 @@
 import StudentClassCard from '../../components/common/StudentClassCard';
 
-function ClassListPage() {
+interface ClassListPageProps {
+  onNavigateToClassDetail?: (classId: string, className: string) => void;
+  onNavigateToStudentList?: (classId: string, className: string) => void;
+  onNavigateToAchievementAnalysis?: (classId: string, className: string) => void;
+}
+
+function ClassListPage({ 
+  onNavigateToClassDetail, 
+  onNavigateToStudentList, 
+  onNavigateToAchievementAnalysis 
+}: ClassListPageProps = {}) {
   const studentClasses = [
     {
       id: '1',
@@ -167,6 +177,9 @@ function ClassListPage() {
             totalStudents={item.totalStudents}
             submissions={item.submissions}
             homeworkRate={item.homeworkRate}
+            onStudentClick={() => onNavigateToStudentList?.(item.id, item.name)}
+            onAssignmentClick={() => onNavigateToClassDetail?.(item.id, item.name)}
+            onClassRegisterClick={() => onNavigateToAchievementAnalysis?.(item.id, item.name)}
           />
         ))}
       </div>

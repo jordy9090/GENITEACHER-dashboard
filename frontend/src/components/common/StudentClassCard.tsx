@@ -6,9 +6,20 @@ interface StudentClassCardProps {
   totalStudents: number;
   submissions: number;
   homeworkRate: number;
+  onStudentClick?: () => void;
+  onAssignmentClick?: () => void;
+  onClassRegisterClick?: () => void;
 }
 
-function StudentClassCard({ name, totalStudents, submissions, homeworkRate }: StudentClassCardProps) {
+function StudentClassCard({ 
+  name, 
+  totalStudents, 
+  submissions, 
+  homeworkRate,
+  onStudentClick,
+  onAssignmentClick,
+  onClassRegisterClick
+}: StudentClassCardProps) {
   return (
     <div style={{
       backgroundColor: 'white',
@@ -82,44 +93,62 @@ function StudentClassCard({ name, totalStudents, submissions, homeworkRate }: St
         gap: '8px',
         justifyContent: 'space-between'
       }}>
-        <button style={{
-          flex: 1,
-          padding: '8px 12px',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#666',
-          cursor: 'pointer',
-          transition: 'all 0.2s'
-        }}>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onStudentClick?.();
+          }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            fontSize: '12px',
+            color: '#666',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
           공석
         </button>
-        <button style={{
-          flex: 1,
-          padding: '8px 12px',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #ddd',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#666',
-          cursor: 'pointer',
-          transition: 'all 0.2s'
-        }}>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onAssignmentClick?.();
+          }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            fontSize: '12px',
+            color: '#666',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
           과제
         </button>
-        <button style={{
-          flex: 1,
-          padding: '8px 12px',
-          backgroundColor: '#20c997',
-          border: 'none',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: 'white',
-          fontWeight: '500',
-          cursor: 'pointer',
-          transition: 'all 0.2s'
-        }}>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            onClassRegisterClick?.();
+          }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            backgroundColor: '#20c997',
+            border: 'none',
+            borderRadius: '4px',
+            fontSize: '12px',
+            color: 'white',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
           클래스 등록하기
         </button>
       </div>
