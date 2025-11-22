@@ -18,12 +18,22 @@ function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     <aside
       style={{
         width: "250px",
-        backgroundColor: "#2c3e50",
+        backgroundColor: "white",
         color: "white",
         padding: "20px",
       }}
     >
-      <h2 style={{ marginBottom: "30px", fontSize: "20px" }}>GENITEACHER</h2>
+      <div style={{ marginBottom: "30px" }}>
+        <img 
+          src="/logo.png" 
+          alt="GENITEACHER" 
+          style={{ 
+            width: "100%", 
+            height: "auto",
+            maxWidth: "210px"
+          }} 
+        />
+      </div>
       <nav>
         <ul style={{ listStyle: "none", padding: 0 }}>
           {menuItems.map((item) => {
@@ -33,7 +43,7 @@ function Sidebar({ currentPage, onNavigate }: SidebarProps) {
                 <button
                   onClick={() => onNavigate(item.page)}
                   style={{
-                    color: "white",
+                    color: "#475467",
                     textDecoration: "none",
                     display: "flex",
                     alignItems: "center",
