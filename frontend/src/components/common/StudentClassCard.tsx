@@ -110,7 +110,7 @@ function StudentClassCard({
             transition: 'all 0.2s'
           }}
         >
-          공석
+          학생
         </button>
         <button 
           onClick={(e) => {
@@ -129,7 +129,7 @@ function StudentClassCard({
             transition: 'all 0.2s'
           }}
         >
-          과제
+          클래스
         </button>
         <button 
           onClick={(e) => {
@@ -149,7 +149,7 @@ function StudentClassCard({
             transition: 'all 0.2s'
           }}
         >
-          클래스 등록하기
+          성취분석
         </button>
       </div>
     </div>

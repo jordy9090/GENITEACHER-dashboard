@@ -24,14 +24,14 @@ function Sidebar({ currentPage, onNavigate }: SidebarProps) {
       }}
     >
       <div style={{ marginBottom: "30px" }}>
-        <img 
-          src="/logo.png" 
-          alt="GENITEACHER" 
-          style={{ 
-            width: "100%", 
+        <img
+          src="/logo.png"
+          alt="GENITEACHER"
+          style={{
+            width: "100%",
             height: "auto",
-            maxWidth: "210px"
-          }} 
+            maxWidth: "210px",
+          }}
         />
       </div>
       <nav>
@@ -43,20 +43,19 @@ function Sidebar({ currentPage, onNavigate }: SidebarProps) {
                 <button
                   onClick={() => onNavigate(item.page)}
                   style={{
-                    color: "#475467",
+                    color: isActive ? "#0891B2" : "#475467",
                     textDecoration: "none",
                     display: "flex",
                     alignItems: "center",
                     padding: "10px",
                     borderRadius: "5px",
-                    backgroundColor: isActive
-                      ? "rgba(255,255,255,0.1)"
-                      : "transparent",
+                    backgroundColor: isActive ? "#ECFEFF" : "transparent",
                     transition: "background-color 0.2s",
                     border: "none",
                     width: "100%",
                     cursor: "pointer",
                     fontSize: "14px",
+                    fontWeight: isActive ? "500" : "400",
                   }}
                 >
                   <span style={{ marginRight: "10px" }}>{item.icon}</span>
