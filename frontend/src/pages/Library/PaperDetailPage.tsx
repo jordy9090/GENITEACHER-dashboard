@@ -61,7 +61,7 @@ function PaperDetailPage({
   const [selectedStudentFilter, setSelectedStudentFilter] = useState<string>("all");
   const [selectedQuestionFilter, setSelectedQuestionFilter] = useState<string>("all");
   
-  const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "오답률 분석"];
+  const tabs = ["학생별 성과", "문제별 분석", "풀이 분석", "오답률 분석"];
 
   const studentData: StudentPerformance[] = [
     {
