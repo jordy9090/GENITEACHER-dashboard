@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CalendarSection from "./components/CalendarSection";
 import TodaySchedule from "./components/TodaySchedule";
 import WeeklySummary from "./components/WeeklySummary";
 import UpcomingEvents from "./components/UpcomingEvents";
 import AddScheduleModal from "./components/AddScheduleModal";
 
-// --- [Type 정의] ---
 export interface ScheduleItem {
   id: number;
   time: string;
@@ -13,7 +12,7 @@ export interface ScheduleItem {
   sub: string;
   member?: string;
   active: boolean;
-  date?: string;
+  date: string;
 }
 
 export interface EventItem {
@@ -28,7 +27,6 @@ export interface StatItem {
   count: number;
 }
 
-// --- [목업 데이터 (가짜 DB)] ---
 let MOCK_SCHEDULES: ScheduleItem[] = [
   {
     id: 1,
@@ -63,6 +61,30 @@ let MOCK_SCHEDULES: ScheduleItem[] = [
     active: false,
     date: "2025-10-15",
   },
+  {
+    id: 5,
+    time: "10:00",
+    title: "2반 수학 수업",
+    sub: "소인수분해",
+    active: false,
+    date: "2025-10-16",
+  },
+  {
+    id: 6,
+    time: "14:00",
+    title: "교사 회의",
+    sub: "학사 일정 논의",
+    active: false,
+    date: "2025-10-18",
+  },
+  {
+    id: 7,
+    time: "09:00",
+    title: "1반 수학 수업",
+    sub: "이차함수 그래프",
+    active: false,
+    date: "2025-10-20",
+  },
 ];
 
 const MOCK_EVENTS: EventItem[] = [
@@ -81,45 +103,61 @@ const MOCK_STATS: StatItem[] = [
 
 function SchedulePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
   const [currentDate, setCurrentDate] = useState(new Date(2025, 9, 1));
+  const [selectedDate, setSelectedDate] = useState("2025-10-15");
 
-  // --- [State] 서버에서 받아온 데이터를 저장 ---
   const [todaySchedules, setTodaySchedules] = useState<ScheduleItem[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<EventItem[]>([]);
   const [weeklyStats, setWeeklyStats] = useState<StatItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- [GET 시뮬레이션] 데이터 불러오기 ---
-  useEffect(() => {
-    // 실제라면: axios.get('/api/schedule')...
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        setTodaySchedules([...MOCK_SCHEDULES]);
-        setUpcomingEvents([...MOCK_EVENTS]);
-        setWeeklyStats([...MOCK_STATS]);
-      } catch (e) {
-        console.error("데이터 로딩 실패", e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentDate]);
-
-  // --- [POST 시뮬레이션] 데이터 저장하기 ---
-  const handleSaveSchedule = async (newData: any) => {
-    // 로딩 시작 (선택사항)
-    // setIsLoading(true);
-
+  const fetchSchedulesByDate = useCallback(async (date: string) => {
+    setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      const filtered = MOCK_SCHEDULES.filter((s) => s.date === date).sort(
+        (a, b) => a.time.localeCompare(b.time)
+      );
+      setTodaySchedules(filtered);
+    } catch (e) {
+      console.error("일정 로딩 실패", e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-      const newId = MOCK_SCHEDULES.length + 1;
+  const fetchSummaryData = useCallback(async () => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      setWeeklyStats([...MOCK_STATS]);
+    } catch (e) {
+      console.error("주간 요약 로딩 실패", e);
+    }
+  }, []);
+
+  const fetchUpcomingEvents = useCallback(async () => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      setUpcomingEvents([...MOCK_EVENTS]);
+    } catch (e) {
+      console.error("다가오는 일정 로딩 실패", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSummaryData();
+    fetchUpcomingEvents();
+  }, [fetchSummaryData, fetchUpcomingEvents]);
+
+  useEffect(() => {
+    fetchSchedulesByDate(selectedDate);
+  }, [selectedDate, fetchSchedulesByDate]);
+
+  const handleSaveSchedule = async (newData: any) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const newId = Math.max(...MOCK_SCHEDULES.map((s) => s.id)) + 1;
       const newSchedule: ScheduleItem = {
         id: newId,
         time: newData.startTime || "00:00",
@@ -130,41 +168,53 @@ function SchedulePage() {
       };
       MOCK_SCHEDULES.push(newSchedule);
 
-      setTodaySchedules([...MOCK_SCHEDULES]);
-
       setIsModalOpen(false);
-      alert("일정이 서버에 저장되었습니다!");
+
+      fetchSchedulesByDate(selectedDate);
+
+      alert("일정이 저장되었습니다!");
     } catch (e) {
       alert("저장 실패");
     }
   };
 
-  // 캘린더 이동 함수
   const handlePrevMonth = () => {
     setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
     );
   };
+
   const handleNextMonth = () => {
     setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
   };
-  const handleDateClick = (day: number) => {
+
+  const handleDateSelect = (day: number) => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
     const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
     setSelectedDate(formattedDate);
+  };
+
+  const handleOpenAddModal = () => {
     setIsModalOpen(true);
+  };
+
+  const formatDisplayDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split("-");
+    return `${parseInt(month)}월 ${parseInt(day)}일`;
   };
 
   return (
     <div style={styles.container}>
       <CalendarSection
         currentDate={currentDate}
+        selectedDate={selectedDate}
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
-        onDateClick={handleDateClick}
+        onDateSelect={handleDateSelect}
+        onAddSchedule={handleOpenAddModal}
       />
 
       <div style={styles.sidebar}>
@@ -174,7 +224,10 @@ function SchedulePage() {
           </div>
         ) : (
           <>
-            <TodaySchedule schedules={todaySchedules} />
+            <TodaySchedule
+              schedules={todaySchedules}
+              dateLabel={formatDisplayDate(selectedDate)}
+            />
             <WeeklySummary stats={weeklyStats} />
             <UpcomingEvents events={upcomingEvents} />
           </>

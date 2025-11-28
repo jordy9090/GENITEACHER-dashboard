@@ -12,22 +12,26 @@ interface ScheduleItem {
 
 interface Props {
   schedules: ScheduleItem[];
+  dateLabel?: string;
 }
 
-const TodaySchedule = ({ schedules }: Props) => {
+const TodaySchedule = ({ schedules, dateLabel }: Props) => {
   return (
     <div style={styles.card}>
-      <h3 style={styles.sectionTitle}>오늘의 일정</h3>
+      <h3 style={styles.sectionTitle}>
+        {dateLabel ? `${dateLabel} 일정` : "오늘의 일정"}
+      </h3>
 
       {(!schedules || schedules.length === 0) && (
         <div
           style={{
             textAlign: "center",
-            padding: "20px",
+            padding: "40px 20px",
             color: "#9CA3AF",
             fontSize: "14px",
           }}
         >
+          <div style={{ fontSize: "32px", marginBottom: "12px" }}>📅</div>
           일정이 없습니다.
         </div>
       )}
@@ -64,7 +68,7 @@ const TodaySchedule = ({ schedules }: Props) => {
                   style={{
                     fontWeight: item.active ? "bold" : "600",
                     fontSize: "15px",
-                    color: item.active ? "#111827" : "#9CA3AF",
+                    color: item.active ? "#111827" : "#374151",
                     marginBottom: "4px",
                   }}
                 >
@@ -74,7 +78,7 @@ const TodaySchedule = ({ schedules }: Props) => {
                 <div
                   style={{
                     fontSize: "13px",
-                    color: item.active ? "#4B5563" : "#D1D5DB",
+                    color: item.active ? "#4B5563" : "#9CA3AF",
                     marginBottom: item.member ? "8px" : "0",
                   }}
                 >

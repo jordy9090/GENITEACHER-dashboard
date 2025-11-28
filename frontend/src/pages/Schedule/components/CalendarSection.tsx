@@ -1,34 +1,31 @@
 import React from "react";
 
 interface Props {
-  currentDate: Date; // 현재 날짜 객체
-  onPrevMonth: () => void; // 이전 달 함수
-  onNextMonth: () => void; // 다음 달 함수
-  onDateClick: (day: number) => void;
+  currentDate: Date;
+  selectedDate: string;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
+  onDateSelect: (day: number) => void;
+  onAddSchedule: () => void;
 }
 
 const CalendarSection = ({
   currentDate,
+  selectedDate,
   onPrevMonth,
   onNextMonth,
-  onDateClick,
+  onDateSelect,
+  onAddSchedule,
 }: Props) => {
-  // --- [로직] 달력 생성 알고리즘 ---
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth(); // 0 ~ 11
+  const month = currentDate.getMonth();
 
-  // 이번 달의 마지막 날짜
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  // 이번 달 1일의 요일 (0: 일요일 ~ 6: 토요일)
   const firstDayOfWeek = new Date(year, month, 1).getDay();
-
-  // 이전 달의 마지막 날짜 (빈칸 채우기용)
   const prevMonthLastDate = new Date(year, month, 0).getDate();
 
-  // 날짜 배열 생성
   const days = [];
 
-  // 1. 지난달 날짜 채우기 (회색 처리)
   for (let i = 0; i < firstDayOfWeek; i++) {
     days.push({
       day: prevMonthLastDate - firstDayOfWeek + 1 + i,
@@ -36,18 +33,20 @@ const CalendarSection = ({
     });
   }
 
-  // 2. 이번 달 날짜 채우기
   for (let i = 1; i <= daysInMonth; i++) {
     days.push({ day: i, type: "current" });
   }
 
-  // 3. 다음 달 날짜 채우기 (나머지 칸 - 총 35칸 또는 42칸 맞추기)
   const remainingCells = 42 - days.length;
   for (let i = 1; i <= remainingCells; i++) {
     days.push({ day: i, type: "next" });
   }
 
-  const showDemoEvents = year === 2025 && month === 10;
+  const isSelectedDate = (day: number, type: string) => {
+    if (type !== "current") return false;
+    const formattedDate = `${year}-${(month + 1).toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+    return formattedDate === selectedDate;
+  };
 
   const monthNames = [
     "January",
@@ -80,12 +79,8 @@ const CalendarSection = ({
             ❯
           </button>
         </div>
-        <button
-          style={styles.addBtn}
-          onClick={() => onDateClick(new Date().getDate())}
-        >
-          일정추가{" "}
-          <span style={{ fontSize: "16px", marginLeft: "4px" }}>+</span>
+        <button style={styles.addBtn} onClick={onAddSchedule}>
+          일정추가 <span style={{ fontSize: "16px", marginLeft: "4px" }}>+</span>
         </button>
       </div>
 
@@ -107,6 +102,7 @@ const CalendarSection = ({
         {days.map((item, index) => {
           const isCurrentMonth = item.type === "current";
           const isSunday = index % 7 === 0;
+          const isSelected = isSelectedDate(item.day, item.type);
 
           let textColor = "#374151";
           if (!isCurrentMonth) textColor = "#E5E7EB";
@@ -117,32 +113,21 @@ const CalendarSection = ({
               key={index}
               style={{
                 ...styles.cell,
-                backgroundColor:
-                  showDemoEvents && item.day === 15 && isCurrentMonth
-                    ? "#F0FDFA"
-                    : "transparent",
+                backgroundColor: isSelected ? "#E6FAF8" : "transparent",
+                borderLeft: isSelected ? "3px solid #2DD4BF" : "none",
               }}
-              onClick={() => isCurrentMonth && onDateClick(item.day)}
+              onClick={() => isCurrentMonth && onDateSelect(item.day)}
             >
               <span
                 style={{
                   ...styles.dateNum,
-                  color: textColor,
-                  fontWeight:
-                    showDemoEvents && item.day === 15 && isCurrentMonth
-                      ? "bold"
-                      : "500",
+                  fontWeight: isSelected ? "bold" : "500",
+                  backgroundColor: isSelected ? "#2DD4BF" : "transparent",
+                  color: isSelected ? "#fff" : textColor,
                 }}
               >
                 {item.day}
               </span>
-
-              {showDemoEvents && isCurrentMonth && item.day === 13 && (
-                <>
-                  <div style={styles.eventText}>• 9AM 1반 수학</div>
-                  <div style={styles.eventText}>• 11AM 3반 수학</div>
-                </>
-              )}
             </div>
           );
         })}
@@ -207,38 +192,29 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "14px",
     paddingBottom: "10px",
   },
-
-  // Grid Body를 CSS Grid로 변경하여 7열 자동 배치
   gridBody: {
     display: "grid",
-    gridTemplateColumns: "repeat(7, 1fr)", // 7열 고정
+    gridTemplateColumns: "repeat(7, 1fr)",
     borderTop: "1px solid #E5E7EB",
-    borderLeft: "1px solid #E5E7EB", // 외곽선 보강
+    borderLeft: "1px solid #E5E7EB",
   },
   cell: {
     padding: "10px",
     borderRight: "1px solid #F3F4F6",
-    borderBottom: "1px solid #F3F4F6", // Grid 아이템마다 하단 선
+    borderBottom: "1px solid #F3F4F6",
     cursor: "pointer",
     position: "relative",
-    minHeight: "100px", // 높이 확보
+    minHeight: "100px",
+    transition: "background-color 0.2s ease",
   },
   dateNum: {
     fontSize: "14px",
     marginBottom: "6px",
     display: "inline-block",
-    width: "24px",
-    height: "24px",
-    lineHeight: "24px",
+    width: "28px",
+    height: "28px",
+    lineHeight: "28px",
     textAlign: "center",
     borderRadius: "50%",
-  },
-  eventText: {
-    fontSize: "11px",
-    color: "#4B5563",
-    marginBottom: "2px",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
   },
 };
