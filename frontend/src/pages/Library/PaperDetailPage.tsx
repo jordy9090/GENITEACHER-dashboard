@@ -48,7 +48,7 @@ interface InsightItem {
 }
 
 function PaperDetailPage({
-  paperId,
+  paperId: _paperId,
   subject,
   title,
   description,

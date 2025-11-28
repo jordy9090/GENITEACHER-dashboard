@@ -1,0 +1,79 @@
+Skip to content
+
+Find…
+F
+
+New Project
+importing from GitHub
+
+jordy9090/GENITEACHER-dashboard
+student/class
+frontend
+Choose where you want to create the project and give it a name.
+
+Vercel Team
+
+jordy's projects
+Hobby
+Slash Divider
+Project Name
+geniteacher-dashboard
+Framework Preset
+Framework logo
+Other
+Root Directory
+frontend
+Build Command
+
+npm run build
+Output Directory
+
+dist
+Install Command
+
+`yarn install`, `pnpm install`, `npm install`, or `bun install`
+Deployment
+Deployment failed with error.
+Build Logs
+19s
+25 lines
+Find in logs
+CtrlF
+50 packages are looking for funding
+  run `npm fund` for details
+> geniteacher-frontend@0.0.0 build
+> tsc -b && vite build
+src/pages/Class/AchievementAnalysisPage.tsx(437,49): error TS6133: 'i' is declared but its value is never read.
+src/pages/Class/StudentDetailPage.tsx(33,30): error TS6133: 'studentId' is declared but its value is never read.
+src/pages/Class/StudentDetailPage.tsx(34,10): error TS6133: 'activeRightTab' is declared but its value is never read.
+src/pages/Class/StudentDetailPage.tsx(34,26): error TS6133: 'setActiveRightTab' is declared but its value is never read.
+src/pages/Class/StudentListPage.tsx(20,28): error TS6133: 'classId' is declared but its value is never read.
+src/pages/Library/PaperDetailPage.tsx(51,3): error TS6133: 'paperId' is declared but its value is never read.
+src/pages/Schedule/SchedulePage.tsx(205,12): error TS6133: 'year' is declared but its value is never read.
+Error: Command "npm run build" exited with 2
+Deployment Summary
+Assigning Custom Domains
+Add configuration file for single-page application routing - 5631da
+Import a different Git Repository →
+Browse Templates →
+Home
+Docs
+Guides
+Academy
+Help
+Contact
+Loading status…
+
+Select a display theme:
+
+system
+
+light
+
+dark
+New Project – Vercel
+Asia/Seoul	2025년 11월 29일 오전 2:13:20.247
+UTC	2025년 11월 28일 오후 5:13:20.247
+Relative	less than a minute ago
+Timestamp	1764350000247
+Relative to start	13s

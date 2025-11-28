@@ -30,8 +30,8 @@ interface HistoryData {
   score: string;
 }
 
-function StudentDetailPage({ studentId, studentName, onBack }: StudentDetailPageProps) {
-  const [activeRightTab, setActiveRightTab] = useState(0);
+function StudentDetailPage({ studentId: _studentId, studentName, onBack }: StudentDetailPageProps) {
+  const [_activeRightTab, _setActiveRightTab] = useState(0);
 
   const problemsData: ProblemData[] = [
     {

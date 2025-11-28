@@ -202,7 +202,7 @@ function SchedulePage() {
   };
 
   const formatDisplayDate = (dateStr: string) => {
-    const [year, month, day] = dateStr.split("-");
+    const [_year, month, day] = dateStr.split("-");
     return `${parseInt(month)}월 ${parseInt(day)}일`;
   };
 

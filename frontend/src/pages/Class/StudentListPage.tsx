@@ -17,7 +17,7 @@ interface Student {
   riskLevel: 'high' | 'medium' | 'low';
 }
 
-function StudentListPage({ classId, className, onBack, onNavigateToStudent }: StudentListPageProps) {
+function StudentListPage({ classId: _classId, className, onBack, onNavigateToStudent }: StudentListPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 12;

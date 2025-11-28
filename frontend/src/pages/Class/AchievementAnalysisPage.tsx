@@ -434,7 +434,7 @@ function AchievementAnalysisPage({ className, onBack }: AchievementAnalysisPageP
             </h3>
 
             <svg width="300" height="280" viewBox="0 0 300 280">
-              {gridLevels.reverse().map((level, i) => {
+              {gridLevels.reverse().map((level, _i) => {
                 const radius = (level / 100) * radarMaxRadius;
                 const points = radarData.map(d => {
                   const point = polarToCartesian(d.angle, radius);
