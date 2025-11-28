@@ -1,9 +1,9 @@
 import React from "react";
 
 interface Props {
-  currentDate: Date;
-  onPrevMonth: () => void;
-  onNextMonth: () => void;
+  currentDate: Date; // 현재 날짜 객체
+  onPrevMonth: () => void; // 이전 달 함수
+  onNextMonth: () => void; // 다음 달 함수
   onDateClick: (day: number) => void;
 }
 
@@ -13,16 +13,22 @@ const CalendarSection = ({
   onNextMonth,
   onDateClick,
 }: Props) => {
+  // --- [로직] 달력 생성 알고리즘 ---
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const month = currentDate.getMonth(); // 0 ~ 11
 
+  // 이번 달의 마지막 날짜
   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  // 이번 달 1일의 요일 (0: 일요일 ~ 6: 토요일)
   const firstDayOfWeek = new Date(year, month, 1).getDay();
 
+  // 이전 달의 마지막 날짜 (빈칸 채우기용)
   const prevMonthLastDate = new Date(year, month, 0).getDate();
 
+  // 날짜 배열 생성
   const days = [];
 
+  // 1. 지난달 날짜 채우기 (회색 처리)
   for (let i = 0; i < firstDayOfWeek; i++) {
     days.push({
       day: prevMonthLastDate - firstDayOfWeek + 1 + i,
@@ -30,16 +36,18 @@ const CalendarSection = ({
     });
   }
 
+  // 2. 이번 달 날짜 채우기
   for (let i = 1; i <= daysInMonth; i++) {
     days.push({ day: i, type: "current" });
   }
 
+  // 3. 다음 달 날짜 채우기 (나머지 칸 - 총 35칸 또는 42칸 맞추기)
   const remainingCells = 42 - days.length;
   for (let i = 1; i <= remainingCells; i++) {
     days.push({ day: i, type: "next" });
   }
 
-  const showDemoEvents = year === 2025 && month === 9;
+  const showDemoEvents = year === 2025 && month === 10;
 
   const monthNames = [
     "January",
@@ -200,19 +208,20 @@ const styles: { [key: string]: React.CSSProperties } = {
     paddingBottom: "10px",
   },
 
+  // Grid Body를 CSS Grid로 변경하여 7열 자동 배치
   gridBody: {
     display: "grid",
-    gridTemplateColumns: "repeat(7, 1fr)",
+    gridTemplateColumns: "repeat(7, 1fr)", // 7열 고정
     borderTop: "1px solid #E5E7EB",
-    borderLeft: "1px solid #E5E7EB",
+    borderLeft: "1px solid #E5E7EB", // 외곽선 보강
   },
   cell: {
     padding: "10px",
     borderRight: "1px solid #F3F4F6",
-    borderBottom: "1px solid #F3F4F6",
+    borderBottom: "1px solid #F3F4F6", // Grid 아이템마다 하단 선
     cursor: "pointer",
     position: "relative",
-    minHeight: "100px",
+    minHeight: "100px", // 높이 확보
   },
   dateNum: {
     fontSize: "14px",

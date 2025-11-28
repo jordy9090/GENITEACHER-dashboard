@@ -1,108 +1,109 @@
 import React from "react";
 
-const TODAY_SCHEDULE = [
-  {
-    id: 1,
-    time: "09:00",
-    title: "1반 수학 수업",
-    sub: "미분과 적분 단원",
-    active: false,
-  },
-  {
-    id: 2,
-    time: "11:00",
-    title: "3반 수학 수업",
-    sub: "함수의 극한",
-    active: true,
-  },
-  {
-    id: 3,
-    time: "14:00",
-    title: "중간고사 감독",
-    sub: "2학년 수학 시험",
-    active: false,
-  },
-  {
-    id: 4,
-    time: "16:00",
-    title: "학부모 상담",
-    sub: "김하성 학부모님",
-    member: "김하성",
-    active: false,
-  },
-];
+interface ScheduleItem {
+  id: number;
+  time: string;
+  title: string;
+  sub: string;
+  member?: string;
+  active: boolean;
+  date?: string;
+}
 
-const TodaySchedule = () => {
+interface Props {
+  schedules: ScheduleItem[];
+}
+
+const TodaySchedule = ({ schedules }: Props) => {
   return (
     <div style={styles.card}>
       <h3 style={styles.sectionTitle}>오늘의 일정</h3>
+
+      {(!schedules || schedules.length === 0) && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "20px",
+            color: "#9CA3AF",
+            fontSize: "14px",
+          }}
+        >
+          일정이 없습니다.
+        </div>
+      )}
+
       <div style={styles.timelineContainer}>
-        {TODAY_SCHEDULE.map((item, idx) => (
-          <div key={item.id} style={styles.timelineItem}>
-            <div
-              style={{
-                ...styles.timeText,
-                color: item.active ? "#2DD4BF" : "#9CA3AF",
-                fontWeight: item.active ? "bold" : "500",
-              }}
-            >
-              {item.time}
-            </div>
-
-            {idx !== TODAY_SCHEDULE.length - 1 && (
-              <div style={styles.timelineLine}></div>
-            )}
-            <div
-              style={{
-                ...styles.timelineDot,
-                backgroundColor: item.active ? "#2DD4BF" : "#E5E7EB",
-                boxShadow: item.active
-                  ? "0 0 0 4px rgba(45, 212, 191, 0.2)"
-                  : "none",
-              }}
-            ></div>
-
-            <div style={styles.contentBox}>
+        {schedules &&
+          schedules.map((item, idx) => (
+            <div key={item.id} style={styles.timelineItem}>
               <div
                 style={{
-                  fontWeight: item.active ? "bold" : "600",
-                  fontSize: "15px",
-                  color: item.active ? "#111827" : "#9CA3AF",
-                  marginBottom: "4px",
+                  ...styles.timeText,
+                  color: item.active ? "#2DD4BF" : "#9CA3AF",
+                  fontWeight: item.active ? "bold" : "500",
                 }}
               >
-                {item.title}
+                {item.time}
               </div>
 
+              {idx !== schedules.length - 1 && (
+                <div style={styles.timelineLine}></div>
+              )}
               <div
                 style={{
-                  fontSize: "13px",
-                  color: item.active ? "#4B5563" : "#D1D5DB",
-                  marginBottom: item.member ? "8px" : "0",
+                  ...styles.timelineDot,
+                  backgroundColor: item.active ? "#2DD4BF" : "#E5E7EB",
+                  boxShadow: item.active
+                    ? "0 0 0 4px rgba(45, 212, 191, 0.2)"
+                    : "none",
                 }}
-              >
-                {item.sub}
-              </div>
+              ></div>
 
-              {item.member && (
+              <div style={styles.contentBox}>
                 <div
-                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+                  style={{
+                    fontWeight: item.active ? "bold" : "600",
+                    fontSize: "15px",
+                    color: item.active ? "#111827" : "#9CA3AF",
+                    marginBottom: "4px",
+                  }}
                 >
-                  <div style={styles.avatar}>👤</div>
-                  <span
+                  {item.title}
+                </div>
+
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: item.active ? "#4B5563" : "#D1D5DB",
+                    marginBottom: item.member ? "8px" : "0",
+                  }}
+                >
+                  {item.sub}
+                </div>
+
+                {item.member && (
+                  <div
                     style={{
-                      fontSize: "13px",
-                      color: "#6B7280",
-                      fontWeight: "500",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
-                    {item.member}
-                  </span>
-                </div>
-              )}
+                    <div style={styles.avatar}>👤</div>
+                    <span
+                      style={{
+                        fontSize: "13px",
+                        color: "#6B7280",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item.member}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

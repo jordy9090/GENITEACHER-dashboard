@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "../../components/common/Card";
+import AddScheduleModal from "../Schedule/components/AddScheduleModal";
 
 interface Schedule {
   time: string;
@@ -9,7 +10,8 @@ interface Schedule {
 
 function DashboardPage() {
   const [currentMonth] = useState("October");
-  const [schedules] = useState<Schedule[]>([
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [schedules, setSchedules] = useState<Schedule[]>([
     { time: "AM 9:30", description: "1반 수학 수업", hour: 9.5 },
     { time: "AM 11:00", description: "3반 수학 수업", hour: 11 },
     { time: "PM 14:00", description: "중간고사 감독", hour: 14 },
@@ -30,6 +32,37 @@ function DashboardPage() {
     } else {
       return "upcoming";
     }
+  };
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const day = today.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSaveSchedule = (newData: any) => {
+    const timeStr = newData.startTime || "00:00";
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const hour = hours + minutes / 60;
+    const ampm = hours < 12 ? "AM" : "PM";
+    const displayHour = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    const formattedTime = `${ampm} ${displayHour}:${minutes.toString().padStart(2, "0")}`;
+    
+    const newSchedule: Schedule = {
+      time: formattedTime,
+      description: newData.title,
+      hour: hour,
+    };
+    
+    setSchedules(prev => [...prev, newSchedule].sort((a, b) => a.hour - b.hour));
+    setIsModalOpen(false);
+    alert("일정이 추가되었습니다!");
   };
 
   const monthlyData = [
@@ -594,6 +627,7 @@ function DashboardPage() {
               오늘의 일정
             </h3>
             <button
+              onClick={handleOpenModal}
               style={{
                 padding: "6px 12px",
                 backgroundColor: "#1abc9c",
@@ -741,6 +775,13 @@ function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <AddScheduleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedDate={getTodayDate()}
+        onSave={handleSaveSchedule}
+      />
     </div>
   );
 }

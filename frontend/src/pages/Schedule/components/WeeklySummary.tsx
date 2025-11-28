@@ -1,23 +1,26 @@
 import React from "react";
 
-const SUMMARY_STATS = [
-  { label: "수업", count: 12 },
-  { label: "시험", count: 3 },
-  { label: "상담", count: 5 },
-  { label: "회의", count: 2 },
-];
+interface StatItem {
+  label: string;
+  count: number;
+}
 
-const WeeklySummary = () => {
+interface Props {
+  stats: StatItem[];
+}
+
+const WeeklySummary = ({ stats }: Props) => {
   return (
     <div style={styles.card}>
       <h3 style={styles.sectionTitle}>이번 주 요약</h3>
       <div style={styles.summaryGrid}>
-        {SUMMARY_STATS.map((stat) => (
-          <div key={stat.label} style={styles.summaryBox}>
-            <div style={styles.summaryLabel}>{stat.label}</div>
-            <div style={styles.summaryCount}>{stat.count}</div>
-          </div>
-        ))}
+        {stats &&
+          stats.map((stat) => (
+            <div key={stat.label} style={styles.summaryBox}>
+              <div style={styles.summaryLabel}>{stat.label}</div>
+              <div style={styles.summaryCount}>{stat.count}</div>
+            </div>
+          ))}
       </div>
     </div>
   );

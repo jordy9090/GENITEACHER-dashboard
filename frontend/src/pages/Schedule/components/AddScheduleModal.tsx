@@ -1,20 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   selectedDate: string;
+  onSave: (data: any) => void;
 }
 
-const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
+const AddScheduleModal = ({ isOpen, onClose, selectedDate, onSave }: Props) => {
+  // 입력값 State
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("");
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [memo, setMemo] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setDate(selectedDate || "2025-10-15");
+      setTitle("");
+      setStartTime("");
+      setEndTime("");
+      setMemo("");
+      setType("분류를 선택하세요");
+    }
+  }, [isOpen, selectedDate]);
+
   if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    if (!title) {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+    onSave({
+      title,
+      type,
+      date,
+      startTime,
+      endTime,
+      memo,
+    });
+  };
 
   return (
     <div style={styles.modalOverlay}>
       <div style={styles.modalBody}>
         <div style={styles.modalHeader}>
           <h2 style={styles.modalTitle}>일정 추가</h2>
-          <p style={styles.modalDesc}>Deploy your new project in one-click</p>
+          <p style={styles.modalDesc}>새로운 일정을 등록합니다.</p>
         </div>
 
         <div style={styles.inputGroup}>
@@ -23,8 +58,14 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
             type="text"
             placeholder="일정 제목을 입력하세요"
             style={styles.inputField}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+
+        {/* ... (중간 입력 필드들은 아래 value, onChange만 추가해주면 됩니다) ... */}
+        {/* 편의상 날짜/시간/분류/메모 부분에 value와 onChange를 모두 연결했다고 가정합니다. */}
+        {/* 아래 코드는 전체 코드입니다. */}
 
         <div style={styles.inputGroup}>
           <label style={styles.formLabel}>분류</label>
@@ -35,8 +76,13 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
                 appearance: "none",
                 backgroundColor: "white",
               }}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
             >
               <option>분류를 선택하세요</option>
+              <option value="수업">수업</option>
+              <option value="회의">회의</option>
+              <option value="상담">상담</option>
             </select>
             <span style={styles.selectArrow}>▼</span>
           </div>
@@ -47,7 +93,8 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
           <div style={{ position: "relative" }}>
             <input
               type="text"
-              defaultValue={selectedDate || "2025-10-15"}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
               style={styles.inputField}
             />
             <span style={styles.iconPos}>📅</span>
@@ -60,8 +107,10 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
             <div style={{ position: "relative" }}>
               <input
                 type="text"
-                placeholder="-- : -- 부터"
+                placeholder="09:00"
                 style={styles.inputField}
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
               />
               <span style={styles.iconPos}>🕒</span>
             </div>
@@ -71,27 +120,13 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
             <div style={{ position: "relative" }}>
               <input
                 type="text"
-                placeholder="-- : -- 까지"
+                placeholder="10:00"
                 style={styles.inputField}
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
               />
               <span style={styles.iconPos}>🕒</span>
             </div>
-          </div>
-        </div>
-
-        <div style={styles.inputGroup}>
-          <label style={styles.formLabel}>클래스/대상</label>
-          <div style={{ position: "relative" }}>
-            <select
-              style={{
-                ...styles.inputField,
-                appearance: "none",
-                backgroundColor: "white",
-              }}
-            >
-              <option>선택사항</option>
-            </select>
-            <span style={styles.selectArrow}>▼</span>
           </div>
         </div>
 
@@ -100,6 +135,8 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
           <textarea
             placeholder="추가 내용이나 메모를 입력하세요"
             style={{ ...styles.inputField, height: "100px", resize: "none" }}
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
           />
         </div>
 
@@ -107,7 +144,9 @@ const AddScheduleModal = ({ isOpen, onClose, selectedDate }: Props) => {
           <button onClick={onClose} style={styles.btnCancel}>
             취소
           </button>
-          <button style={styles.btnSave}>저장</button>
+          <button onClick={handleSubmit} style={styles.btnSave}>
+            저장
+          </button>
         </div>
       </div>
     </div>
