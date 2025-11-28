@@ -30,17 +30,21 @@ interface ProblemAnalysis {
   concept: string;
 }
 
-interface StudentSolutionData {
-  id: string;
+interface AnalysisNote {
+  questionId: number;
+  studentId: number;
   studentName: string;
   className: string;
-  solveTime: string;
-  status: string;
-  statusColor: string;
-  handwritingImage: string;
-  wrongReason: string;
-  errorPatterns: string[];
-  learningPoints: string[];
+  handwriting: string;
+  reasonWrong: string;
+  errorPattern: string;
+  suggestion: string;
+}
+
+interface InsightItem {
+  questionId: number;
+  index: number;
+  wrongRate: number;
 }
 
 function PaperDetailPage({
@@ -54,9 +58,10 @@ function PaperDetailPage({
   const [sortOrder, setSortOrder] = useState<"print" | "incorrect">("print");
   const [selectedProblem, setSelectedProblem] =
     useState<ProblemAnalysis | null>(null);
-  const [selectedProblemForAnalysis, setSelectedProblemForAnalysis] =
-    useState("1번");
-  const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "인사이트"];
+  const [selectedStudentFilter, setSelectedStudentFilter] = useState<string>("all");
+  const [selectedQuestionFilter, setSelectedQuestionFilter] = useState<string>("all");
+  
+  const tabs = ["학생별 성과", "문제별 분석", "개별 분석", "오답률 분석"];
 
   const studentData: StudentPerformance[] = [
     {
@@ -83,7 +88,7 @@ function PaperDetailPage({
     },
     {
       id: "3",
-      name: "김현성",
+      name: "박지훈",
       className: "3학년 7반",
       time: "88분 34초",
       correctRate: "87%",
@@ -94,7 +99,7 @@ function PaperDetailPage({
     },
     {
       id: "4",
-      name: "강민성",
+      name: "이서연",
       className: "3학년 7반",
       time: "88분 34초",
       correctRate: "87%",
@@ -105,7 +110,7 @@ function PaperDetailPage({
     },
     {
       id: "5",
-      name: "김현성",
+      name: "최유나",
       className: "3학년 7반",
       time: "88분 34초",
       correctRate: "87%",
@@ -142,57 +147,116 @@ function PaperDetailPage({
     };
   });
 
-  const studentSolutions: StudentSolutionData[] = [
+  const analysisNotes: AnalysisNote[] = [
     {
-      id: "1",
-      studentName: "학생1",
+      questionId: 1,
+      studentId: 101,
+      studentName: "김현성",
       className: "3반 24번",
-      solveTime: "문제 시간 9분",
-      status: "틀림",
-      statusColor: "#e74c3c",
-      handwritingImage:
-        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23f9f9f9' width='300' height='200'/%3E%3Ctext x='10' y='30' font-family='Arial' font-size='14' fill='%23333'%3ELet s=%C2%B0%3C/text%3E%3Ctext x='10' y='50' font-family='Arial' font-size='14' fill='%23333'%3E∂f%C2%B0x = sx + ★ → ∫wx ξ%3C/text%3E%3Ctext x='10' y='70' font-family='Arial' font-size='14' fill='%23333'%3E∂L%C2%B0s st x%C2%B0L → ∫wx ξ%3C/text%3E%3Ctext x='10' y='100' font-family='Arial' font-size='14' fill='%23f39c12'%3E∂(wx(L,K)) x² + sx(L,K)* ∫ws f(wx)%3C/text%3E%3Ctext x='10' y='120' font-family='Arial' font-size='14' fill='%23333'%3Eby 부분적분%3C/text%3E%3Ctext x='10' y='150' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) → [sx wx F: → ∫ws = 0%3C/text%3E%3Ctext x='10' y='170' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) Let s=f(wx)%3C/text%3E%3C/svg%3E",
-      wrongReason: "변수와 계산 이해",
-      errorPatterns: [
-        "미분계수의 기본 개념 복습 필요",
-        "연쇄법칙 적용 연습 권장",
-        "계산 연습은 안성 중요",
-      ],
-      learningPoints: [
-        "적분의 정의와 초기 계산 복습 권장",
-        "미분식의 기하학적 의미 이해",
-        "심화 분제 반복 연습",
-      ],
+      handwriting: "x = 2라고 가정하면... ∫f(x)dx = F(x) + C",
+      reasonWrong: "계산 실수",
+      errorPattern: "부정확한 연산",
+      suggestion: "기초 연산 반복 추천",
     },
     {
-      id: "2",
-      studentName: "학생2",
+      questionId: 1,
+      studentId: 102,
+      studentName: "강민성",
       className: "3반 25번",
-      solveTime: "문제 시간 9분",
-      status: "힌트있슴",
-      statusColor: "#f39c12",
-      handwritingImage:
-        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23f9f9f9' width='300' height='200'/%3E%3Ctext x='10' y='30' font-family='Arial' font-size='14' fill='%23333'%3ELet s=%C2%B0%3C/text%3E%3Ctext x='10' y='50' font-family='Arial' font-size='14' fill='%23333'%3E∂f%C2%B0x = sx + ★ → ∫wx ξ%3C/text%3E%3Ctext x='10' y='70' font-family='Arial' font-size='14' fill='%23333'%3E∂L%C2%B0s st x%C2%B0L → ∫wx ξ%3C/text%3E%3Ctext x='10' y='100' font-family='Arial' font-size='14' fill='%23f39c12'%3E∂(wx(L,K)) x² + sx(L,K)* ∫ws f(wx)%3C/text%3E%3Ctext x='10' y='120' font-family='Arial' font-size='14' fill='%23333'%3Eby 부분적분%3C/text%3E%3Ctext x='10' y='150' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) → [sx wx F: → ∫ws = 0%3C/text%3E%3Ctext x='10' y='170' font-family='Arial' font-size='14' fill='%23f39c12'%3E= ∫ws(wx) Let s=f(wx)%3C/text%3E%3C/svg%3E",
-      wrongReason: "항수와 극값 조건을 초기값 방법",
-      errorPatterns: [
-        "극값의 정의와 초기 재산 필요",
-        "미분식의 기하학적 의미 이해",
-        "심화 분제 반복 연습",
-      ],
-      learningPoints: [
-        "극값의 정의와 초기 재산 필요",
-        "미분식의 기하학적 의미 이해",
-        "심화 분제 반복 연습",
-      ],
+      handwriting: "lim(x→0) f(x) = ... 극한값 계산",
+      reasonWrong: "극한 개념 이해 부족",
+      errorPattern: "극한 정의 미숙",
+      suggestion: "극한 기초 개념 복습 권장",
+    },
+    {
+      questionId: 2,
+      studentId: 101,
+      studentName: "김현성",
+      className: "3반 24번",
+      handwriting: "극값에서 부호가 바뀜... f'(x) = 0",
+      reasonWrong: "그래프 해석 오류",
+      errorPattern: "시각 자료 해석 미숙",
+      suggestion: "그래프 읽기 연습 문제 추천",
+    },
+    {
+      questionId: 2,
+      studentId: 103,
+      studentName: "박지훈",
+      className: "3반 26번",
+      handwriting: "dy/dx = 2x + 3... 도함수 적용",
+      reasonWrong: "미분 공식 적용 오류",
+      errorPattern: "연쇄법칙 미적용",
+      suggestion: "연쇄법칙 집중 연습 필요",
+    },
+    {
+      questionId: 3,
+      studentId: 102,
+      studentName: "강민성",
+      className: "3반 25번",
+      handwriting: "∑(n=1 to ∞) 1/n² = π²/6",
+      reasonWrong: "급수 수렴 조건 혼동",
+      errorPattern: "수열/급수 개념 혼동",
+      suggestion: "수열과 급수 구분 학습 권장",
+    },
+    {
+      questionId: 5,
+      studentId: 104,
+      studentName: "이서연",
+      className: "3반 27번",
+      handwriting: "sin²x + cos²x = 1 활용...",
+      reasonWrong: "삼각함수 공식 적용 실수",
+      errorPattern: "공식 암기 부정확",
+      suggestion: "삼각함수 공식 반복 암기",
+    },
+    {
+      questionId: 7,
+      studentId: 105,
+      studentName: "최유나",
+      className: "3반 28번",
+      handwriting: "ln(ab) = ln(a) + ln(b)...",
+      reasonWrong: "로그 법칙 적용 오류",
+      errorPattern: "로그 연산 규칙 혼동",
+      suggestion: "로그 기본 법칙 복습",
+    },
+    {
+      questionId: 10,
+      studentId: 101,
+      studentName: "김현성",
+      className: "3반 24번",
+      handwriting: "치환적분 u = x² + 1...",
+      reasonWrong: "치환 후 범위 변환 누락",
+      errorPattern: "적분 범위 처리 미숙",
+      suggestion: "정적분 치환 연습 권장",
     },
   ];
 
-  const insightData = [
-    { problemNumber: "21번", incorrectRate: 70, color: "#20c997" },
-    { problemNumber: "28번", incorrectRate: 85, color: "#e74c3c" },
-    { problemNumber: "29번", incorrectRate: 60, color: "#20c997" },
-    { problemNumber: "30번", incorrectRate: 60, color: "#20c997" },
-  ];
+  const insightData: InsightItem[] = Array.from({ length: 30 }, (_, i) => ({
+    questionId: i + 1,
+    index: i + 1,
+    wrongRate: Math.random() * 0.8 + 0.1,
+  })).sort((a, b) => b.wrongRate - a.wrongRate);
+
+  const getFilteredNotes = () => {
+    let filtered = [...analysisNotes];
+    
+    if (selectedStudentFilter !== "all") {
+      filtered = filtered.filter(note => note.studentId.toString() === selectedStudentFilter);
+    }
+    
+    if (selectedQuestionFilter !== "all") {
+      filtered = filtered.filter(note => note.questionId.toString() === selectedQuestionFilter);
+    }
+    
+    return filtered;
+  };
+
+  const uniqueStudents = Array.from(
+    new Map(analysisNotes.map(note => [note.studentId, { id: note.studentId, name: note.studentName }])).values()
+  );
+
+  const uniqueQuestions = Array.from(
+    new Set(analysisNotes.map(note => note.questionId))
+  ).sort((a, b) => a - b);
 
   return (
     <div
@@ -239,8 +303,8 @@ function PaperDetailPage({
             <div
               style={{
                 display: "flex",
-                alignItems: "center", // 수평 중앙 맞춤
-                gap: "16px", // title과 description 사이 간격
+                alignItems: "center",
+                gap: "16px",
                 marginBottom: "16px",
               }}
             >
@@ -322,10 +386,9 @@ function PaperDetailPage({
             display: "flex",
             gap: "16px",
             justifyContent: "flex-start",
-            maxWidth: "600px", // 섹션 너비 제한
+            maxWidth: "600px",
           }}
         >
-          {/* 출제일시 */}
           <div
             style={{
               backgroundColor: "#F0FDFA",
@@ -347,7 +410,6 @@ function PaperDetailPage({
             </div>
           </div>
 
-          {/* 문제 수 */}
           <div
             style={{
               backgroundColor: "#FFF1F2",
@@ -365,11 +427,10 @@ function PaperDetailPage({
             <div
               style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
             >
-              45개
+              30개
             </div>
           </div>
 
-          {/* 참여학생 */}
           <div
             style={{
               backgroundColor: "#ECFEFF",
@@ -391,7 +452,6 @@ function PaperDetailPage({
             </div>
           </div>
 
-          {/* 평균 소요시간 */}
           <div
             style={{
               backgroundColor: "#FAF5FF",
@@ -409,7 +469,7 @@ function PaperDetailPage({
             <div
               style={{ fontSize: "14px", fontWeight: "500", color: "#2c3e50" }}
             >
-              3.5초
+              45분
             </div>
           </div>
         </div>
@@ -423,7 +483,6 @@ function PaperDetailPage({
           marginBottom: "24px",
         }}
       >
-        {/* 카드 1 */}
         <div
           style={{
             backgroundColor: "white",
@@ -439,7 +498,6 @@ function PaperDetailPage({
               gap: "16px",
             }}
           >
-            {/* 아이콘 왼쪽 */}
             <div
               style={{
                 width: "40px",
@@ -455,11 +513,10 @@ function PaperDetailPage({
               😊
             </div>
 
-            {/* 텍스트 오른쪽 정렬 */}
             <div style={{ display: "flex", flexDirection: "column", flex: 1, textAlign: "right" }}>
               <span style={{ fontSize: "13px", color: "#999" }}>참여 학생</span>
               <span style={{ fontSize: "32px", fontWeight: "600", color: "#2196f3" }}>
-                4
+                29
                 <span
                   style={{
                     fontSize: "16px",
@@ -475,7 +532,6 @@ function PaperDetailPage({
           </div>
         </div>
 
-        {/* 카드 2 */}
         <div
           style={{
             backgroundColor: "white",
@@ -524,7 +580,6 @@ function PaperDetailPage({
           </div>
         </div>
 
-        {/* 카드 3 */}
         <div
           style={{
             backgroundColor: "white",
@@ -573,7 +628,6 @@ function PaperDetailPage({
           </div>
         </div>
 
-        {/* 카드 4 */}
         <div
           style={{
             backgroundColor: "white",
@@ -644,7 +698,7 @@ function PaperDetailPage({
                 key={index}
                 onClick={() => setActiveTab(index)}
                 style={{
-                  flex: 1, // 각 버튼이 동일한 너비 차지
+                  flex: 1,
                   padding: "12px 0",
                   backgroundColor: "transparent",
                   border: "none",
@@ -729,7 +783,7 @@ function PaperDetailPage({
                         color: "#666",
                       }}
                     >
-                      힌트 사용 빈도 ▼
+                      힌트사용률 ▼
                     </th>
                     <th
                       style={{
@@ -791,16 +845,16 @@ function PaperDetailPage({
                         >
                           <div
                             style={{
-                              width: "40px",
-                              height: "40px",
+                              width: "36px",
+                              height: "36px",
                               borderRadius: "50%",
-                              backgroundColor: "#e3f2fd",
+                              backgroundColor: "#20c997",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              fontSize: "16px",
+                              color: "white",
                               fontWeight: "600",
-                              color: "#2196f3",
+                              fontSize: "14px",
                             }}
                           >
                             {student.name.charAt(0)}
@@ -821,60 +875,81 @@ function PaperDetailPage({
                           </div>
                         </div>
                       </td>
-                      <td style={{ padding: "16px", textAlign: "center" }}>
-                        <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.time}
-                        </div>
+                      <td
+                        style={{
+                          padding: "16px",
+                          textAlign: "center",
+                          fontSize: "14px",
+                          color: "#2c3e50",
+                        }}
+                      >
+                        {student.time}
+                      </td>
+                      <td
+                        style={{
+                          padding: "16px",
+                          textAlign: "center",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          color: "#4caf50",
+                        }}
+                      >
+                        {student.correctRate}
+                      </td>
+                      <td
+                        style={{
+                          padding: "16px",
+                          textAlign: "center",
+                          fontSize: "14px",
+                          color: "#2c3e50",
+                        }}
+                      >
+                        {student.hintUsage}
+                      </td>
+                      <td
+                        style={{
+                          padding: "16px",
+                          textAlign: "center",
+                          fontSize: "14px",
+                          color: "#2c3e50",
+                        }}
+                      >
+                        {student.metacognition}
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            color: "#2c3e50",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {student.correctRate}
-                        </div>
-                      </td>
-                      <td style={{ padding: "16px", textAlign: "center" }}>
-                        <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.hintUsage}
-                        </div>
-                      </td>
-                      <td style={{ padding: "16px", textAlign: "center" }}>
-                        <div style={{ fontSize: "14px", color: "#2c3e50" }}>
-                          {student.metacognition}
-                        </div>
-                      </td>
-                      <td style={{ padding: "16px", textAlign: "center" }}>
-                        <div
-                          style={{
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "50%",
-                            backgroundColor: student.wrongNoteCompleted
-                              ? "#20c997"
-                              : "#e0e0e0",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {student.wrongNoteCompleted && (
-                            <span style={{ color: "white", fontSize: "12px" }}>
-                              ✓
-                            </span>
-                          )}
-                        </div>
+                        {student.wrongNoteCompleted ? (
+                          <span
+                            style={{
+                              color: "#20c997",
+                              fontSize: "18px",
+                            }}
+                          >
+                            ✓
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              color: "#e74c3c",
+                              fontSize: "18px",
+                            }}
+                          >
+                            ✗
+                          </span>
+                        )}
                       </td>
                       <td style={{ padding: "16px", textAlign: "center" }}>
                         <span
                           style={{
+                            padding: "4px 12px",
+                            borderRadius: "4px",
+                            fontSize: "12px",
+                            fontWeight: "500",
                             color:
                               student.status === "완료" ? "#20c997" : "#e74c3c",
-                            fontSize: "14px",
-                            fontWeight: "500",
+                            backgroundColor:
+                              student.status === "완료"
+                                ? "#e0f7f4"
+                                : "#fce4ec",
                           }}
                         >
                           {student.status}
@@ -884,83 +959,6 @@ function PaperDetailPage({
                   ))}
                 </tbody>
               </table>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "8px",
-                marginTop: "24px",
-              }}
-            >
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "transparent",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                  color: "#666",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                }}
-              >
-                ← Previous
-              </button>
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "#20c997",
-                  border: "none",
-                  borderRadius: "4px",
-                  color: "white",
-                  fontSize: "13px",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                }}
-              >
-                1
-              </button>
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "transparent",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                  color: "#666",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                }}
-              >
-                2
-              </button>
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "transparent",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                  color: "#666",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                }}
-              >
-                3
-              </button>
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "transparent",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                  color: "#666",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                }}
-              >
-                Next →
-              </button>
             </div>
           </div>
         )}
@@ -1271,19 +1269,6 @@ function PaperDetailPage({
                   cursor: "pointer",
                 }}
               >
-                ...
-              </button>
-              <button
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "transparent",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "4px",
-                  color: "#666",
-                  fontSize: "13px",
-                  cursor: "pointer",
-                }}
-              >
                 Next →
               </button>
             </div>
@@ -1292,376 +1277,558 @@ function PaperDetailPage({
 
         {activeTab === 2 && (
           <div>
-            <div style={{ marginBottom: "20px" }}>
-              <select
-                value={selectedProblemForAnalysis}
-                onChange={(e) => setSelectedProblemForAnalysis(e.target.value)}
-                style={{
-                  padding: "10px 16px",
-                  fontSize: "14px",
-                  borderRadius: "6px",
-                  border: "1px solid #e0e0e0",
-                  backgroundColor: "white",
-                  cursor: "pointer",
-                  minWidth: "150px",
-                }}
-              >
-                {Array.from({ length: 30 }, (_, i) => (
-                  <option key={i + 1} value={`${i + 1}번`}>{i + 1}번</option>
-                ))}
-              </select>
-            </div>
-
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
-                gap: "20px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "24px",
               }}
             >
-              {studentSolutions.map((solution) => (
-                <div
-                  key={solution.id}
+              <h3
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  color: "#0891B2",
+                  margin: 0,
+                }}
+              >
+                학생 풀이 흔적 및 오류 패턴 분석
+              </h3>
+              <div style={{ display: "flex", gap: "12px" }}>
+                <select
+                  value={selectedStudentFilter}
+                  onChange={(e) => setSelectedStudentFilter(e.target.value)}
                   style={{
+                    padding: "10px 16px",
+                    fontSize: "14px",
+                    borderRadius: "6px",
+                    border: "1px solid #e0e0e0",
                     backgroundColor: "white",
-                    borderRadius: "12px",
-                    padding: "20px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    cursor: "pointer",
+                    minWidth: "150px",
                   }}
                 >
+                  <option value="all">전체 학생</option>
+                  {uniqueStudents.map((student) => (
+                    <option key={student.id} value={student.id.toString()}>
+                      {student.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={selectedQuestionFilter}
+                  onChange={(e) => setSelectedQuestionFilter(e.target.value)}
+                  style={{
+                    padding: "10px 16px",
+                    fontSize: "14px",
+                    borderRadius: "6px",
+                    border: "1px solid #e0e0e0",
+                    backgroundColor: "white",
+                    cursor: "pointer",
+                    minWidth: "150px",
+                  }}
+                >
+                  <option value="all">전체 문항</option>
+                  {uniqueQuestions.map((qId) => (
+                    <option key={qId} value={qId.toString()}>
+                      {qId}번 문항
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {getFilteredNotes().length === 0 ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "60px 20px",
+                  color: "#999",
+                }}
+              >
+                <div style={{ fontSize: "48px", marginBottom: "16px" }}>📝</div>
+                <div style={{ fontSize: "16px" }}>
+                  선택한 조건에 해당하는 분석 데이터가 없습니다.
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
+                  gap: "20px",
+                }}
+              >
+                {getFilteredNotes().map((note, idx) => (
                   <div
+                    key={idx}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      marginBottom: "16px",
+                      backgroundColor: "#fafafa",
+                      borderRadius: "12px",
+                      padding: "24px",
+                      border: "1px solid #e8e8e8",
                     }}
                   >
                     <div
                       style={{
-                        width: "48px",
-                        height: "48px",
-                        borderRadius: "50%",
-                        background:
-                          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
-                        color: "white",
-                        fontSize: "16px",
-                        fontWeight: "600",
+                        justifyContent: "space-between",
+                        marginBottom: "16px",
                       }}
                     >
-                      {solution.studentName.slice(-1)}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <h3
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            background: "linear-gradient(135deg, #20c997 0%, #0891B2 100%)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {note.studentName.slice(-1)}
+                        </div>
+                        <div>
+                          <div style={{ fontSize: "15px", fontWeight: "600", color: "#2c3e50" }}>
+                            {note.studentName}
+                          </div>
+                          <div style={{ fontSize: "12px", color: "#999" }}>
+                            {note.className}
+                          </div>
+                        </div>
+                      </div>
+                      <span
                         style={{
-                          margin: 0,
-                          fontSize: "16px",
+                          padding: "4px 12px",
+                          borderRadius: "20px",
+                          fontSize: "12px",
                           fontWeight: "600",
-                          color: "#2c3e50",
+                          color: "#0891B2",
+                          backgroundColor: "#E0F7FA",
                         }}
                       >
-                        {solution.studentName}
-                      </h3>
+                        {note.questionId}번 문항
+                      </span>
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "8px",
+                        padding: "16px",
+                        marginBottom: "16px",
+                        border: "1px solid #e8e8e8",
+                      }}
+                    >
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
                           gap: "8px",
-                          marginTop: "4px",
-                          fontSize: "13px",
-                          color: "#666",
+                          marginBottom: "8px",
                         }}
                       >
-                        <span>{solution.className}</span>
-                        <span>•</span>
-                        <span>{solution.solveTime}</span>
-                        <span>•</span>
-                        <span
-                          style={{
-                            color: solution.statusColor,
-                            fontWeight: "500",
-                          }}
-                        >
-                          {solution.status}
+                        <span style={{ fontSize: "16px" }}>✏️</span>
+                        <span style={{ fontSize: "13px", fontWeight: "600", color: "#666" }}>
+                          필기 내용
                         </span>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          color: "#2c3e50",
+                          lineHeight: "1.6",
+                          fontFamily: "'Nanum Pen Script', cursive, sans-serif",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        "{note.handwriting}"
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundColor: "#FFF1F2",
+                        borderRadius: "8px",
+                        padding: "12px 16px",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                        <span style={{ fontSize: "14px" }}>❌</span>
+                        <span style={{ fontSize: "12px", fontWeight: "600", color: "#e74c3c" }}>
+                          틀린 이유
+                        </span>
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#555" }}>
+                        {note.reasonWrong}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundColor: "#FFF8E1",
+                        borderRadius: "8px",
+                        padding: "12px 16px",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                        <span style={{ fontSize: "14px" }}>⚠️</span>
+                        <span style={{ fontSize: "12px", fontWeight: "600", color: "#f39c12" }}>
+                          오류 패턴
+                        </span>
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#555" }}>
+                        {note.errorPattern}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundColor: "#E0F7FA",
+                        borderRadius: "8px",
+                        padding: "12px 16px",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                        <span style={{ fontSize: "14px" }}>💡</span>
+                        <span style={{ fontSize: "12px", fontWeight: "600", color: "#0891B2" }}>
+                          학습 제안
+                        </span>
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#555" }}>
+                        {note.suggestion}
                       </div>
                     </div>
                   </div>
-
-                  <div
-                    style={{
-                      backgroundColor: "#f9f9f9",
-                      borderRadius: "8px",
-                      padding: "12px",
-                      marginBottom: "16px",
-                      minHeight: "200px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src={solution.handwritingImage}
-                      alt="학생 풀이"
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      backgroundColor: "#fff0f5",
-                      borderRadius: "8px",
-                      padding: "12px",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <div style={{ fontSize: "18px" }}>❌</div>
-                      <h4
-                        style={{
-                          margin: 0,
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          color: "#e74c3c",
-                        }}
-                      >
-                        틀린 이유
-                      </h4>
-                    </div>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "13px",
-                        color: "#555",
-                        lineHeight: "1.5",
-                      }}
-                    >
-                      • {solution.wrongReason}
-                    </p>
-                  </div>
-
-                  <div
-                    style={{
-                      backgroundColor: "#fffbea",
-                      borderRadius: "8px",
-                      padding: "12px",
-                      marginBottom: "12px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <div style={{ fontSize: "18px" }}>⚠️</div>
-                      <h4
-                        style={{
-                          margin: 0,
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          color: "#f39c12",
-                        }}
-                      >
-                        주요 오류 패턴
-                      </h4>
-                    </div>
-                    <ul
-                      style={{
-                        margin: 0,
-                        paddingLeft: "20px",
-                        fontSize: "13px",
-                        color: "#555",
-                        lineHeight: "1.8",
-                      }}
-                    >
-                      {solution.errorPatterns.map((pattern, idx) => (
-                        <li key={idx}>{pattern}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div
-                    style={{
-                      backgroundColor: "#e0f7fa",
-                      borderRadius: "8px",
-                      padding: "12px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <div style={{ fontSize: "18px" }}>💡</div>
-                      <h4
-                        style={{
-                          margin: 0,
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          color: "#20c997",
-                        }}
-                      >
-                        학습 제안 포인트
-                      </h4>
-                    </div>
-                    <ul
-                      style={{
-                        margin: 0,
-                        paddingLeft: "20px",
-                        fontSize: "13px",
-                        color: "#555",
-                        lineHeight: "1.8",
-                      }}
-                    >
-                      {solution.learningPoints.map((point, idx) => (
-                        <li key={idx}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {activeTab === 3 && (
           <div style={{ padding: "0" }}>
-            <h2
+            <div
               style={{
-                fontSize: "18px",
-                fontWeight: "600",
-                color: "#20c997",
-                marginBottom: "40px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "32px",
               }}
             >
-              문제별 오답률 분석
-            </h2>
+              <h2
+                style={{
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  color: "#20c997",
+                  margin: 0,
+                }}
+              >
+                문항별 오답률 차트
+              </h2>
+              <span style={{ fontSize: "13px", color: "#999" }}>
+                상위 10개 문항 (오답률 높은 순)
+              </span>
+            </div>
 
             <div
               style={{
-                position: "relative",
-                padding: "20px 40px 60px",
-                minHeight: "350px",
+                backgroundColor: "#fafafa",
+                borderRadius: "12px",
+                padding: "32px",
               }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 20,
-                  bottom: 60,
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
-                  fontSize: "12px",
-                  color: "#999",
+                  gap: "16px",
                 }}
               >
-                <div>100%</div>
-                <div>80%</div>
-                <div>60%</div>
-                <div>40%</div>
-                <div>20%</div>
-                <div>0%</div>
-              </div>
-
-              <div
-                style={{
-                  position: "absolute",
-                  left: 40,
-                  right: 40,
-                  top: 20,
-                  bottom: 60,
-                  borderLeft: "1px solid #e0e0e0",
-                  borderBottom: "1px solid #e0e0e0",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    display: "flex",
-                    alignItems: "flex-end",
-                    justifyContent: "space-around",
-                    gap: "40px",
-                    padding: "0 60px",
-                  }}
-                >
-                  {insightData.map((item, index) => (
+                {insightData.slice(0, 10).map((item, index) => {
+                  const barColor = item.wrongRate >= 0.6 ? "#e74c3c" : item.wrongRate >= 0.4 ? "#f39c12" : "#20c997";
+                  
+                  return (
                     <div
-                      key={index}
+                      key={item.questionId}
                       style={{
-                        flex: 1,
                         display: "flex",
-                        flexDirection: "column",
                         alignItems: "center",
+                        gap: "16px",
                       }}
                     >
                       <div
                         style={{
-                          width: "100%",
-                          maxWidth: "120px",
-                          height: `${item.incorrectRate * 3}px`,
-                          backgroundColor: item.color,
-                          borderRadius: "4px 4px 0 0",
-                          transition: "all 0.3s ease",
+                          width: "60px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          color: "#2c3e50",
+                          textAlign: "right",
                         }}
-                      />
+                      >
+                        {item.index}번
+                      </div>
+                      <div
+                        style={{
+                          flex: 1,
+                          height: "32px",
+                          backgroundColor: "#e8e8e8",
+                          borderRadius: "6px",
+                          overflow: "hidden",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: `${item.wrongRate * 100}%`,
+                            height: "100%",
+                            backgroundColor: barColor,
+                            borderRadius: "6px",
+                            transition: "width 0.5s ease",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                            paddingRight: "8px",
+                          }}
+                        >
+                          {item.wrongRate >= 0.15 && (
+                            <span
+                              style={{
+                                fontSize: "12px",
+                                fontWeight: "600",
+                                color: "white",
+                              }}
+                            >
+                              {(item.wrongRate * 100).toFixed(0)}%
+                            </span>
+                          )}
+                        </div>
+                        {item.wrongRate < 0.15 && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              right: "8px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              color: "#666",
+                            }}
+                          >
+                            {(item.wrongRate * 100).toFixed(0)}%
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          width: "80px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        {index === 0 && (
+                          <span
+                            style={{
+                              padding: "2px 8px",
+                              backgroundColor: "#e74c3c",
+                              color: "white",
+                              borderRadius: "4px",
+                              fontSize: "11px",
+                              fontWeight: "600",
+                            }}
+                          >
+                            최다 오답
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
 
               <div
                 style={{
-                  position: "absolute",
-                  left: 40,
-                  right: 40,
-                  bottom: 20,
-                  display: "flex",
-                  justifyContent: "space-around",
-                  gap: "40px",
-                  padding: "0 60px",
+                  marginTop: "32px",
+                  paddingTop: "24px",
+                  borderTop: "1px solid #e0e0e0",
                 }}
               >
-                {insightData.map((item, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                      fontSize: "14px",
-                      color: "#333",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {item.problemNumber}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "32px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "4px",
+                        backgroundColor: "#e74c3c",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#666" }}>
+                      60% 이상 (주의 필요)
+                    </span>
                   </div>
-                ))}
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "4px",
+                        backgroundColor: "#f39c12",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#666" }}>
+                      40~60% (보통)
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "4px",
+                        backgroundColor: "#20c997",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#666" }}>
+                      40% 미만 (양호)
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: "24px",
+                backgroundColor: "#fff",
+                borderRadius: "12px",
+                padding: "24px",
+                border: "1px solid #e8e8e8",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "600",
+                  color: "#2c3e50",
+                  marginTop: 0,
+                  marginBottom: "16px",
+                }}
+              >
+                전체 문항 오답률 상세
+              </h3>
+              <div style={{ overflowX: "auto" }}>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                  }}
+                >
+                  <thead>
+                    <tr style={{ borderBottom: "2px solid #e0e0e0" }}>
+                      <th
+                        style={{
+                          padding: "12px 16px",
+                          textAlign: "left",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          color: "#666",
+                        }}
+                      >
+                        순위
+                      </th>
+                      <th
+                        style={{
+                          padding: "12px 16px",
+                          textAlign: "left",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          color: "#666",
+                        }}
+                      >
+                        문항 번호
+                      </th>
+                      <th
+                        style={{
+                          padding: "12px 16px",
+                          textAlign: "left",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          color: "#666",
+                        }}
+                      >
+                        오답률
+                      </th>
+                      <th
+                        style={{
+                          padding: "12px 16px",
+                          textAlign: "left",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          color: "#666",
+                        }}
+                      >
+                        상태
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {insightData.map((item, idx) => {
+                      const statusColor = item.wrongRate >= 0.6 ? "#e74c3c" : item.wrongRate >= 0.4 ? "#f39c12" : "#20c997";
+                      const statusText = item.wrongRate >= 0.6 ? "주의 필요" : item.wrongRate >= 0.4 ? "보통" : "양호";
+                      const statusBg = item.wrongRate >= 0.6 ? "#fce4ec" : item.wrongRate >= 0.4 ? "#fff8e1" : "#e0f7f4";
+                      
+                      return (
+                        <tr
+                          key={item.questionId}
+                          style={{
+                            borderBottom: "1px solid #f0f0f0",
+                          }}
+                        >
+                          <td style={{ padding: "12px 16px", fontSize: "14px", color: "#999" }}>
+                            {idx + 1}
+                          </td>
+                          <td style={{ padding: "12px 16px", fontSize: "14px", fontWeight: "500", color: "#20c997" }}>
+                            {item.index}번
+                          </td>
+                          <td style={{ padding: "12px 16px", fontSize: "14px", fontWeight: "600", color: statusColor }}>
+                            {(item.wrongRate * 100).toFixed(1)}%
+                          </td>
+                          <td style={{ padding: "12px 16px" }}>
+                            <span
+                              style={{
+                                padding: "4px 12px",
+                                borderRadius: "4px",
+                                fontSize: "12px",
+                                fontWeight: "500",
+                                color: statusColor,
+                                backgroundColor: statusBg,
+                              }}
+                            >
+                              {statusText}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -1670,321 +1837,73 @@ function PaperDetailPage({
 
       {selectedProblem && (
         <div
-          onClick={() => setSelectedProblem(null)}
           style={{
             position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(200, 200, 200, 0.2)",
+            backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
           }}
+          onClick={() => setSelectedProblem(null)}
         >
           <div
-            onClick={(e) => e.stopPropagation()}
             style={{
               backgroundColor: "white",
-              borderRadius: "16px",
+              borderRadius: "12px",
               padding: "32px",
+              maxWidth: "600px",
               width: "90%",
-              maxWidth: "500px",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+              maxHeight: "80vh",
+              overflow: "auto",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <h2
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-                color: "#2c3e50",
-                marginBottom: "24px",
-                marginTop: 0,
-              }}
-            >
-              {selectedProblem.problemNumber} 문제 상세 분석
-            </h2>
-
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "12px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 marginBottom: "24px",
               }}
             >
-              <div
+              <h2 style={{ margin: 0, fontSize: "20px", color: "#2c3e50" }}>
+                {selectedProblem.problemNumber} 상세 정보
+              </h2>
+              <button
+                onClick={() => setSelectedProblem(null)}
                 style={{
-                  backgroundColor: "#fee",
-                  borderRadius: "12px",
-                  padding: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
+                  background: "none",
+                  border: "none",
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  color: "#999",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  📄
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#999",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    문제 난이도
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      color: "#e74c3c",
-                    }}
-                  >
-                    최상
-                  </div>
-                </div>
+                ×
+              </button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div>
+                <strong>난이도:</strong>{" "}
+                <span style={{ color: selectedProblem.difficultyColor }}>
+                  {selectedProblem.difficulty}
+                </span>
               </div>
-
-              <div
-                style={{
-                  backgroundColor: "#e0f7fa",
-                  borderRadius: "12px",
-                  padding: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  💡
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#999",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    틀린 개념
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      color: "#20c997",
-                    }}
-                  >
-                    {selectedProblem.concept}
-                  </div>
-                </div>
+              <div>
+                <strong>오답률:</strong> {selectedProblem.incorrectRate}
               </div>
-
-              <div
-                style={{
-                  backgroundColor: "#e3f2fd",
-                  borderRadius: "12px",
-                  padding: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  😊
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#999",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    오답 인원
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      color: "#2196f3",
-                    }}
-                  >
-                    28/29
-                  </div>
-                </div>
+              <div>
+                <strong>평균 풀이시간:</strong> {selectedProblem.averageTime}
               </div>
-
-              <div
-                style={{
-                  backgroundColor: "#f3e5f5",
-                  borderRadius: "12px",
-                  padding: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  ⏰
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#999",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    평균 시간
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "600",
-                      color: "#9c27b0",
-                    }}
-                  >
-                    {selectedProblem.averageTime}
-                  </div>
-                </div>
+              <div>
+                <strong>출제 개념:</strong> {selectedProblem.concept}
               </div>
             </div>
-
-            <div
-              style={{
-                backgroundColor: "#f0f8ff",
-                borderRadius: "12px",
-                padding: "16px",
-                marginBottom: "16px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "12px",
-                }}
-              >
-                <div style={{ fontSize: "20px" }}>📋</div>
-                <h3
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: "600",
-                    color: "#2c3e50",
-                    margin: 0,
-                  }}
-                >
-                  문제 내용
-                </h3>
-              </div>
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "#555",
-                  lineHeight: "1.6",
-                  margin: 0,
-                }}
-              >
-                수직선 위에서 집 P의 위치 x가 다음 조건을 만족하는 미분방정식을
-                구하는 문제입니다. 변위와 속도의 관계를 이용하여 미분계수의
-                활용을 묻고 있습니다.
-              </p>
-            </div>
-
-            <div
-              style={{
-                backgroundColor: "#fff0f0",
-                borderRadius: "12px",
-                padding: "16px",
-                marginBottom: "24px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "12px",
-                }}
-              >
-                <div style={{ fontSize: "20px" }}>🎯</div>
-                <h3
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: "600",
-                    color: "#2c3e50",
-                    margin: 0,
-                  }}
-                >
-                  주요 오답 원인
-                </h3>
-              </div>
-              <ul
-                style={{
-                  fontSize: "14px",
-                  color: "#555",
-                  lineHeight: "1.8",
-                  margin: 0,
-                  paddingLeft: "20px",
-                }}
-              >
-                <li>미분계수의 물리적 의미 이해 부족</li>
-                <li>변수 분리 과정에서의 계산 실수</li>
-                <li>초기 조건 적용 오류</li>
-              </ul>
-            </div>
-
-            <button
-              onClick={() => setSelectedProblem(null)}
-              style={{
-                width: "100%",
-                padding: "12px",
-                backgroundColor: "#20c997",
-                border: "none",
-                borderRadius: "8px",
-                color: "white",
-                fontSize: "15px",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            >
-              확인
-            </button>
           </div>
         </div>
       )}
